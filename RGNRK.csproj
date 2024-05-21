@@ -14,20 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\Shared\_NavBar.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\css\landinghome.css" />
     <Content Remove="wwwroot\css\site - Copia.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNet.Security.OAuth.Twitter" Version="8.0.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
@@ -39,7 +32,6 @@
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="7.5.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageReference Include="MySql.Data" Version="8.4.0" />
-    <PackageReference Include="OpenIddict" Version="5.6.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.2" />
   </ItemGroup>
 
