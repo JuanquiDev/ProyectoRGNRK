@@ -5,78 +5,184 @@
     ViewData["Title"] = "Entra";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
-                    <span asp-validation-for="Input.Password" class="text-danger"></span>
-                </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary" style="background-color: #199DFC;">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword" style="color: #199DFC">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="color: #199DFC">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" style="color: #199DFC">Resend email confirmation</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Entra con tu cuenta de:</h3>
+<style>
+    .centered-container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .centered-content {
+        display: flex;
+        justify-content: space-between;
+        max-width: 1200px;
+        width: 100%;
+    }
+
+    .form-container, .external-login-container {
+        flex: 1;
+        margin: 10px;
+    }
+
+    .form-container {
+        max-width: 500px;
+    }
+
+    .btn-primary {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: white;
+        color: #444;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: thin solid #888;
+        box-shadow: 1px 1px 1px grey;
+        white-space: nowrap;
+        margin: 5px;
+        padding: 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-primary img.login-logo {
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .btn-primary span {
+            display: none; /* Hide the text initially */
+        }
+
+    /* Specific styles for Google and Microsoft buttons */
+    .btn-google {
+        background: #FFFFFF;
+        border: none;
+    }
+
+    .btn-microsoft {
+        background: #FFFFFF;
+        border: none;
+    }
+
+    /* Flexbox container for the buttons */
+    .external-login-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Adjust the gap between buttons if needed */
+    }
+
+    /* Style for titles */
+    .title {
+        font-size: 1.5rem; /* Adjust as needed */
+    }
+
+    /* Style for the "Regístrate" button */
+    .register-section {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .register-button {
+        background-color: #199DFC;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+    }
+
+</style>
+
+<div class="centered-container">
+    <div class="centered-content">
+        <div class="form-container">
+            <h1 class="text-center title">@ViewData["Title"]</h1>
+            <section>
+                <form id="account" method="post">
+                    <hr />
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="ejemplo@correo.com" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="contraseña" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="checkbox mb-3">
+                        <label asp-for="Input.RememberMe" class="form-label">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            @Html.DisplayNameFor(m => m.Input.RememberMe)
+                        </label>
+                    </div>
+                    <div>
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg" style="background-color: #199DFC;">Log in</button>
+                    </div>
+                    <br />
+                    <div>
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword" style="color: #199DFC">He olvidado mi contraseña</a>
+                        </p>
+                        <p>
+                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" style="color: #199DFC">Reenviar correo de confirmación</a>
+                        </p>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <div class="external-login-container">
+            <h3 class="text-center title">Entra con tu cuenta de:</h3>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
                         <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                article
+                                about setting up this ASP.NET application to support logging in via external services
+                            </a>.
                         </p>
                     </div>
                 }
                 else
                 {
                     <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
+                        <div class="external-login-buttons">
+                            @foreach (var provider in Model.ExternalLogins!)
+                            {
+                                var logoFileName = provider.Name.ToLower() == "google" ? "google-logo.png" : provider.Name.ToLower() == "twitter" ? "x-logo.png" : "microsoft-logo.png";
+                                <div class="external-login-btn">
+                                    <button type="submit" class="btn-primary btn-@provider.Name.ToLower()" name="provider" value="@provider.Name" title="Entra usando tu cuenta de @provider.DisplayName">
+                                        <img src="~/img/@logoFileName" alt="@provider.DisplayName logo" class="login-logo" />
+                                        <span>@provider.DisplayName</span>
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </form>
+
                 }
             }
-        </section>
+            <div class="register-section">
+                <h3 class="text-center title">¿Aún no tienes cuenta con nosotros?</h3>
+                <br />
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">
+                    <button class="register-button">Regístrate</button>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 }
