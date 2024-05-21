@@ -21,6 +21,7 @@
             height: 65px;
         }
 
+
         .footer-black {
             background-color: #000000;
             height: 70px;
@@ -29,25 +30,24 @@
         .footer-links {
             margin-top: 15px;
         }
-
-        /* Add padding to the body to avoid content being hidden behind the fixed header */
-        body {
-            padding-top: 65px;
-        }
     </style>
 </head>
 <body class="bg-dark text-white d-flex flex-column" style="min-height: 100vh;">
-    <header class="menu d-flex align-items-center header-black fixed-top">
+    <header class="menu d-flex align-items-center header-black">
         <div class="container-fluid">
             <div class="row justify-content-between align-items-center">
                 <div class="col-auto">
-                    <a href="~/">
-                        <img src="~/img/logo-blanco.png" alt="Logo" width="175" height="26" />
-                    </a>
+                    <img src="~/img/logo-blanco.png" alt="Logo" width="175" height="26" />
                     <img class="logo2-1-icon" loading="lazy" alt="" src="~/public/logo2-1@2x.png" />
                 </div>
                 <div class="col-6">
-                    @await Html.PartialAsync("_NavBar")
+                    <nav class="secciones d-flex justify-content-center">
+                        <div class="ejercicios me-3"><a class="nav-link text-light" asp-area="" asp-page="/Ejercicios">Ejercicios</a></div>
+                        <div class="trainers me-3"><a class="nav-link text-light" asp-area="" asp-page="/Trainers">Trainers</a></div>
+                        <div class="blog me-3"><a class="nav-link text-light" asp-area="" asp-page="/Blog">Blog</a></div>
+                        <div class="entrenamientos me-3"><a class="nav-link text-light" asp-area="" asp-page="/Entrenamientos">Entrenamientos</a></div>
+                        <div class="contacto me-3"><a class="nav-link text-light" asp-area="" asp-page="/Contacto">Contacto</a></div>
+                    </nav>
                 </div>
                 <div class="col-auto">
                     <button class="login-area btn custom-button px-5 py-2 mx-1">
