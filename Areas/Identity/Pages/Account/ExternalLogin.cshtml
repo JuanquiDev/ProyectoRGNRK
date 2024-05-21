@@ -1,30 +1,69 @@
 ﻿@page
 @model ExternalLoginModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Registro";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
-<hr />
+<style>
+    .centered-container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
 
-<p id="external-login-description" class="text-info">
-    You've successfully authenticated with <strong>@Model.ProviderDisplayName</strong>.
-    Please enter an email address for this site below and click the Register button to finish
-    logging in.
-</p>
+    .centered-content {
+        display: flex;
+        justify-content: center;
+        max-width: 1200px;
+        width: 100%;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="Please enter your email."/>
-                <label asp-for="Input.Email" class="form-label"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+    .form-container {
+        max-width: 500px;
+        width: 100%;
+    }
+
+
+
+        .btn-primary span {
+            display: none; /* Hide the text initially */
+        }
+
+    .title {
+        font-size: 1.5rem; /* Adjust as needed */
+    }
+
+    .register-button {
+        background-color: #199DFC;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+    }
+</style>
+
+<div class="centered-container">
+    <div class="centered-content">
+        <div class="form-container">
+            <h1 class="text-center title">@ViewData["Title"]</h1>
+            <h2 id="external-login-title" class="text-center">Asocia tu cuenta de @Model.ProviderDisplayName.</h2>
+            <hr />
+            <p id="external-login-description" class="text-info text-center">
+                Te has autenticado con éxito con <strong>@Model.ProviderDisplayName</strong>.
+                Introduce una cuenta de correo de este sitio y pulsa en Aceptar para acceder.
+                
+            </p>
+            <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control" autocomplete="email" placeholder="Introduce tu correo." />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <button type="submit" class="w-100 btn btn-lg btn-primary">Aceptar</button>
+            </form>
+        </div>
     </div>
 </div>
 
