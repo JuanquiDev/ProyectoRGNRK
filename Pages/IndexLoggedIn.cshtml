@@ -1,0 +1,62 @@
+﻿@page
+@model RGNRK.Pages.IndexLoggedInModel
+@{
+    ViewData["Title"] = "Home - Logged In";
+}
+
+<h1 class="title">Bienvenido, @Model.UserProfile.FirstName @Model.UserProfile.LastName</h1>
+
+<div class="user-profile">
+    <p><strong>Nombre:</strong> @Model.UserProfile.FirstName</p>
+    <p><strong>Apellidos:</strong> @Model.UserProfile.LastName</p>
+    <p><strong>Correo:</strong> @Model.UserProfile.Email</p>
+    <p><strong>Altura:</strong> @Model.UserProfile.Height cm</p>
+    <p><strong>Peso:</strong> @Model.UserProfile.Weight kg</p>
+    <p><strong>Categoría:</strong> @Model.UserProfile.UserCategory</p>
+
+    <a asp-page="/Benchmarks" class="btn-bnch btn-primary">Mis Marcas</a>
+
+    @* <h2>Mis Reservas</h2>
+    <ul>
+        @foreach (var reserva in @Model.UserProfile.Reservas)
+        {
+            <li>@reserva.Fecha - @reserva.Entrenador</li>
+        }
+    </ul> *@
+</div>
+
+<style>
+    .title {
+        font-family: 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 40px;
+        color: white;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .user-profile {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.2rem;
+        color: white;
+        text-align: left;
+        margin: 20px;
+    }
+
+    .btn-bnch {
+        background-color: #199DFC;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+    }
+
+        .btn-bnch:hover {
+            color: #D3D3D3;
+            text-decoration: none;
+        }
+</style>

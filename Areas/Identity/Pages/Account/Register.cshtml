@@ -91,6 +91,31 @@
                 <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Repetir contraseña*" />
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" aria-required="true" placeholder="Nombre*" />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" aria-required="true" placeholder="Apellido*" />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Height" class="form-control" aria-required="true" placeholder="Altura*" />
+                <span asp-validation-for="Input.Height" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Weight" class="form-control" aria-required="true" placeholder="Peso*" />
+                <span asp-validation-for="Input.Weight" class="text-danger"></span>
+            </div>
+            <div class="form-floating mb-3">
+                <select asp-for="Input.UserCategory" class="form-control" aria-required="true">
+                    <option value="">Seleccione una categoría</option>
+                    <option value="basic">Básico</option>
+                    <option value="standar">Estándar</option>
+                    <option value="advanced">Avanzado</option>
+                </select>
+                <span asp-validation-for="Input.UserCategory" class="text-danger"></span>
+            </div>
             <div class="form-check mb-3">
                 <input asp-for="Input.AcceptTerms" class="form-check-input" aria-required="true" />
                 <label asp-for="Input.AcceptTerms" class="form-check-label">Acepto los términos y condiciones de uso</label>
