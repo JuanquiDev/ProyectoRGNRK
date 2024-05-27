@@ -49,13 +49,29 @@ namespace RGNRK.Areas.Identity.Pages.Account
             _context = context;
         }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public string ReturnUrl { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public class InputModel
         {
             [Required]
@@ -78,6 +94,7 @@ namespace RGNRK.Areas.Identity.Pages.Account
             [Display(Name = "Accept Terms and Conditions")]
             public bool AcceptTerms { get; set; }
 
+            // New fields
             [Required]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
@@ -99,6 +116,7 @@ namespace RGNRK.Areas.Identity.Pages.Account
             public Users.Category UserCategory { get; set; }
         }
 
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
@@ -112,12 +130,6 @@ namespace RGNRK.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-
-                user.FirstName = Input.FirstName;
-                user.LastName = Input.LastName;
-                user.Height = Input.Height;
-                user.Weight = Input.Weight;
-                user.UserCategory = Input.UserCategory;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -173,12 +185,11 @@ namespace RGNRK.Areas.Identity.Pages.Account
             return Page();
         }
 
-
-        private ApplicationUser CreateUser()
+        private IdentityUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<ApplicationUser>();
+                return Activator.CreateInstance<IdentityUser>();
             }
             catch
             {
@@ -198,6 +209,4 @@ namespace RGNRK.Areas.Identity.Pages.Account
         }
     }
 
-
 }
-

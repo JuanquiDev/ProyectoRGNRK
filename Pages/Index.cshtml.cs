@@ -9,9 +9,9 @@ namespace RGNRK.Pages
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
-        public IndexModel(ILogger<IndexModel> logger, SignInManager<ApplicationUser> signInManager)
+        public IndexModel(ILogger<IndexModel> logger, SignInManager<IdentityUser> signInManager)
         {
             _logger = logger;
             _signInManager = signInManager;
