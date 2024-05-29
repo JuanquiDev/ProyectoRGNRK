@@ -116,9 +116,9 @@
                         <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="contraseña" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-                    <div class="checkbox mb-3">
-                        <label asp-for="Input.RememberMe" class="form-label">
-                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" asp-for="Input.RememberMe" />
+                        <label class="form-check-label" asp-for="Input.RememberMe">
                             @Html.DisplayNameFor(m => m.Input.RememberMe)
                         </label>
                     </div>
