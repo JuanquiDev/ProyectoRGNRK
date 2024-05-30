@@ -1,11 +1,15 @@
-﻿.title {
+﻿body {
+}
+
+.title {
     font-family: 'Inter', sans-serif;
     font-weight: 500;
-    font-size: 75px; /* Tamaño fijo en píxeles */
-    color: #585655;
+    font-size: 75px;
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
     text-align: center;
     position: absolute;
-    top: 15%; /* Posición fija en porcentaje */
+    top: 15%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -13,11 +17,12 @@
 .subtitle {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 140px; /* Tamaño fijo en píxeles */
-    color: #585655;
+    font-size: 120px; 
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
     text-align: center;
     position: absolute;
-    top: 45%; /* Posición fija en porcentaje */
+    top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
@@ -36,7 +41,7 @@
     display: inline-block;
     margin-top: 20px;
     position: absolute;
-    top: 75%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
 }

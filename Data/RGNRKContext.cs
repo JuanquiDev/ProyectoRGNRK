@@ -6,12 +6,12 @@ namespace RGNRK.Data;
 
 public class RGNRKContext : IdentityDbContext<User>
 {
-    public DbSet<User> Users { get; set; }
     public DbSet<Workout> Workouts { get; set; }
     public DbSet<Exercise> Exercises { get; set; }
     public DbSet<Benchmarks> Benchmarks { get; set; }
     public DbSet<PersonalCalendar> PersonalCalendars { get; set; }
     public DbSet<Reserva> Reservas { get; set; }
+    public DbSet<Video> Videos { get; set;} 
 
     public RGNRKContext(DbContextOptions<RGNRKContext> options)
         : base(options)
