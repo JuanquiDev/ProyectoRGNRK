@@ -1,0 +1,71 @@
+﻿@page
+@model EntrenamientosModel
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using RGNRK.Configuracion
+@using RGNRK.Data
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Entrenamientos";
+    Layout = "_Layout";
+
+    var isAdmin = User.IsInRole(Permissions.Admin_Role);
+    var isAuthorized = User.IsInRole(Permissions.Admin_Role) ||
+                       User.IsInRole(Permissions.Manager_Role) ||
+                       User.IsInRole(Permissions.Coach_Role);
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Entrenamiento</h3>
+            @if (Model.SelectedExercise != null && Model.SelectedExercise.Workout.Any())
+            {
+                <h4>Entrenamiento: @Model.SelectedExercise.Workout.First().Description</h4>
+                @if (isAuthorized)
+                {
+                    <a href="/Entrenamientos/Workouts/Edit?WorkoutId=@Model.SelectedExercise.Workout.First().Id" class="btn btn-primary">Editar Descripción</a>
+                }
+            }
+        </div>
+        <div class="col-md-6">
+            <h3>Ejercicio</h3>
+            <form method="get">
+                <div class="form-group">
+                    <select class="form-control" asp-for="SelectedExerciseId" asp-items="new SelectList(Model.Exercises, " Id", "Name" )">
+                        <option value="">Seleccione un ejercicio</option>
+                    @foreach (var exercise in Model.Exercises)
+                    {
+                            <option value="@exercise.Id" @(exercise.Id == Model.SelectedExerciseId ? "selected" : "")>@exercise.Name</option>
+                    }
+                    </select>
+                </div>
+            </form>
+            <div class="mt-3">
+                    @if (Model.SelectedExercise != null)
+                    {
+                    <h4>@Model.SelectedExercise.Name</h4>
+                    <p>@Model.SelectedExercise.Description</p>
+                        @if (Model.SelectedExercise.ExerciseVideo != null)
+                        {
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" src="@Model.SelectedExercise.ExerciseVideo.Url" allowfullscreen></iframe>
+                        </div>
+                        <a href="@Model.SelectedExercise.ExerciseVideo.Url" class="btn btn-link">Aprender el movimiento</a>
+                        }
+                    }
+                    else
+                    {
+                    <p>Seleccione un ejercicio para ver los detalles.</p>
+                    }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('select').addEventListener('change', function () {
+        window.location.href = '?SelectedExerciseId=' + this.value;
+    });
+</script>

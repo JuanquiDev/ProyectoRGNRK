@@ -1,0 +1,100 @@
+﻿@page
+@model RGNRK.Areas.Ejercicios.Pages.Exercises.ListModel
+@{
+    ViewData["Title"] = "Ejercicios";
+    Layout = "_Layout"; // Asegúrate de que esto apunte a tu layout principal
+}
+
+<style>
+    .category-header {
+        cursor: pointer;
+        color: white;
+        font-weight: bold;
+    }
+
+    .exercise-list {
+        display: none;
+        margin-left: 20px;
+    }
+
+    .white-text {
+        color: white;
+    }
+
+    .video-container {
+        display: block; /* Cambiado a block para que el video se muestre */
+        margin-top: 10px;
+    }
+
+    .video-title {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .table {
+        margin: 20px; /* Añadir margen a la tabla */
+    }
+
+        .table th, .table td {
+            padding: 10px; /* Añadir padding a las celdas de la tabla */
+        }
+</style>
+
+<h1 class="white-text">Ejercicios por Categoría</h1>
+
+@foreach (var category in Model.Categories)
+{
+    <div>
+        <div class="category-header" onclick="toggleExercises('category-@category.Id')">
+            @category.Name
+        </div>
+        <div id="category-@category.Id" class="exercise-list">
+            <table class="table white-text">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Video</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var exercise in category.Exercises)
+                    {
+                        <tr>
+                            <td>@exercise.Name</td>
+                            <td>@exercise.Description</td>
+                            <td>
+                                <div id="video-@exercise.Id" class="video-container">
+                                    <iframe width="560" height="315" src="@exercise.ExerciseVideo.Url" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                                    <div class="video-title">
+                                        <a href="@exercise.ExerciseVideo.Url" target="_blank">@exercise.ExerciseVideo.Title</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+<script>
+    function toggleExercises(id) {
+        var element = document.getElementById(id);
+        if (element.style.display === "none") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
+        }
+    }
+
+    function toggleVideo(id) {
+        var element = document.getElementById(id);
+        if (element.style.display === "none" || element.style.display === "") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
+        }
+    }
+</script>

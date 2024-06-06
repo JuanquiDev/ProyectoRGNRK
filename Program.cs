@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PE_ServicesClassRCL.Models.Permission;
+using RGNRK.Configuracion;
 using RGNRK.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -96,5 +99,6 @@ using (var scope = app.Services.CreateScope())
     }
 
 }
+
 
 app.Run();

@@ -12,6 +12,7 @@ public class RGNRKContext : IdentityDbContext<User>
     public DbSet<PersonalCalendar> PersonalCalendars { get; set; }
     public DbSet<Reserva> Reservas { get; set; }
     public DbSet<Video> Videos { get; set;} 
+    public DbSet<Category> Categories { get; set; }
 
     public RGNRKContext(DbContextOptions<RGNRKContext> options)
         : base(options)
@@ -28,5 +29,14 @@ public class RGNRKContext : IdentityDbContext<User>
             .HasMany(u => u.Reservas)
             .WithOne(r => r.User)
             .HasForeignKey(r => r.UserId);
+
+        builder.Entity<Category>().ToTable("Category");
+
+        builder.Entity<Category>().HasData(
+            new Category { Id = 1, Name = "Basico" },
+            new Category { Id = 2, Name = "Gimnásticos" },
+            new Category { Id = 3, Name = "Halterofilia" },
+            new Category { Id = 4, Name = "Accesorios" }
+        );
     }
 }

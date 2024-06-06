@@ -1,12 +1,18 @@
-﻿namespace RGNRK.Data;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class Workout
+namespace RGNRK.Data
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public int Duration { get; set; }
+    public class Workout
+    {
+        public int Id { get; set; }
 
-    public virtual List<Exercise> Exercise { get; set; }
+        [Required]
+        [StringLength(3000)]
+        public string? Description { get; set; }
 
+        [Required]
+        [Range(1, 1440)] 
+        public int Duration { get; set; }
+        public int ExerciseId { get; set; } 
+    }
 }
