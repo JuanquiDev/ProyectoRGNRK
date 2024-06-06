@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RGNRK.Data;
 
@@ -11,9 +12,11 @@ using RGNRK.Data;
 namespace RGNRK.Migrations
 {
     [DbContext(typeof(RGNRKContext))]
-    partial class RGNRKContextModelSnapshot : ModelSnapshot
+    [Migration("20240529152241_videos")]
+    partial class videos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,6 +38,21 @@ namespace RGNRK.Migrations
                     b.HasIndex("ExerciseId");
 
                     b.ToTable("BenchmarksExercise");
+                });
+
+            modelBuilder.Entity("ExerciseWorkout", b =>
+                {
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExerciseId", "WorkoutId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("ExerciseWorkout");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -192,45 +210,6 @@ namespace RGNRK.Migrations
                     b.ToTable("Benchmarks");
                 });
 
-            modelBuilder.Entity("RGNRK.Data.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Basico"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Gimnásticos"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Halterofilia"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Accesorios"
-                        });
-                });
-
             modelBuilder.Entity("RGNRK.Data.Exercise", b =>
                 {
                     b.Property<int>("Id")
@@ -239,13 +218,10 @@ namespace RGNRK.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("ExerciseVideoId")
+                    b.Property<int>("ExerciseVideoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -253,8 +229,6 @@ namespace RGNRK.Migrations
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("ExerciseVideoId");
 
@@ -269,8 +243,8 @@ namespace RGNRK.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("longtext");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -417,21 +391,19 @@ namespace RGNRK.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(3000)
-                        .HasColumnType("varchar(3000)");
+                        .HasColumnType("longtext");
 
                     b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExerciseId")
                         .HasColumnType("int");
 
                     b.Property<int?>("PersonalCalendarId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasKey("Id");
 
                     b.HasIndex("PersonalCalendarId");
 
@@ -449,6 +421,21 @@ namespace RGNRK.Migrations
                     b.HasOne("RGNRK.Data.Exercise", null)
                         .WithMany()
                         .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ExerciseWorkout", b =>
+                {
+                    b.HasOne("RGNRK.Data.Exercise", null)
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RGNRK.Data.Workout", null)
+                        .WithMany()
+                        .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -506,17 +493,11 @@ namespace RGNRK.Migrations
 
             modelBuilder.Entity("RGNRK.Data.Exercise", b =>
                 {
-                    b.HasOne("RGNRK.Data.Category", "Category")
-                        .WithMany("Exercises")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RGNRK.Data.Video", "ExerciseVideo")
                         .WithMany()
-                        .HasForeignKey("ExerciseVideoId");
-
-                    b.Navigation("Category");
+                        .HasForeignKey("ExerciseVideoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ExerciseVideo");
                 });
@@ -532,25 +513,9 @@ namespace RGNRK.Migrations
 
             modelBuilder.Entity("RGNRK.Data.Workout", b =>
                 {
-                    b.HasOne("RGNRK.Data.Exercise", null)
-                        .WithMany("Workout")
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("RGNRK.Data.PersonalCalendar", null)
                         .WithMany("Workout")
                         .HasForeignKey("PersonalCalendarId");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.Category", b =>
-                {
-                    b.Navigation("Exercises");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.Exercise", b =>
-                {
-                    b.Navigation("Workout");
                 });
 
             modelBuilder.Entity("RGNRK.Data.PersonalCalendar", b =>

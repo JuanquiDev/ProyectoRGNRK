@@ -7,21 +7,46 @@
 <h1 class="title">Bienvenido, @Model.UserProfile.FirstName @Model.UserProfile.LastName</h1>
 
 <div class="user-profile">
-    <p><strong>Nombre:</strong> @Model.UserProfile.FirstName</p>
-    <p><strong>Apellidos:</strong> @Model.UserProfile.LastName</p>
-    <p><strong>Correo:</strong> @Model.UserProfile.Email</p>
-    <p><strong>Altura:</strong> @Model.UserProfile.Height cm</p>
-    <p><strong>Peso:</strong> @Model.UserProfile.Weight kg</p>
-    <p><strong>Categoría:</strong> @Model.UserProfile.UserCategory</p>
+    <form method="post">
+        <div>
+            <label asp-for="UserProfile.FirstName"><strong>Nombre:</strong></label>
+            <input type="text" asp-for="UserProfile.FirstName" class="form-control" />
+            <span asp-validation-for="UserProfile.FirstName" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="UserProfile.LastName"><strong>Apellidos:</strong></label>
+            <input type="text" asp-for="UserProfile.LastName" class="form-control" />
+            <span asp-validation-for="UserProfile.LastName" class="text-danger"></span>
+        </div>
+        <div>
+            <strong>Correo:</strong> @Model.UserProfile.Email
+        </div>
+        <div>
+            <label asp-for="UserProfile.Height"><strong>Altura:</strong></label>
+            <input type="number" asp-for="UserProfile.Height" class="form-control" /> cm
+            <span asp-validation-for="UserProfile.Height" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="UserProfile.Weight"><strong>Peso:</strong></label>
+            <input type="number" asp-for="UserProfile.Weight" class="form-control" /> kg
+            <span asp-validation-for="UserProfile.Weight" class="text-danger"></span>
+        </div>
+        <div>
+            <label asp-for="UserProfile.UserCategory"><strong>Categoría:</strong></label>
+            <input type="text" asp-for="UserProfile.UserCategory" class="form-control" />
+            <span asp-validation-for="UserProfile.UserCategory" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn-bnch btn-primary">Actualizar</button>
+    </form>
 
     <a asp-page="/Benchmarks" class="btn-bnch btn-primary">Mis Marcas</a>
 
     @* <h2>Mis Reservas</h2>
     <ul>
-        @foreach (var reserva in @Model.UserProfile.Reservas)
-        {
-            <li>@reserva.Fecha - @reserva.Entrenador</li>
-        }
+    @foreach (var reserva in @Model.UserProfile.Reservas)
+    {
+    <li>@reserva.Fecha - @reserva.Entrenador</li>
+    }
     </ul> *@
 </div>
 
@@ -60,3 +85,7 @@
             text-decoration: none;
         }
 </style>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
