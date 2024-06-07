@@ -6,7 +6,7 @@ namespace RGNRK.Data
     {
         public int Id { get; set; }
 
-        [Required]
+
         [StringLength(3000)]
         public string? Description { get; set; }
 
