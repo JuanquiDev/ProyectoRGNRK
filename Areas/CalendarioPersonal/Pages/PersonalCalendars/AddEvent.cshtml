@@ -1,0 +1,25 @@
+﻿@page
+@model RGNRK.Areas.CalendarioPersonal.Pages.PersonalCalendars.AddEventModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h2>Agregar Evento</h2>
+
+<form method="post">
+    <div>
+        <label>Workout Description</label>
+        <input type="text" asp-for="Workout.Description" />
+    </div>
+    <div>
+        <label>Workout Duration (minutos)</label>
+        <input type="number" asp-for="Workout.Duration" />
+    </div>
+    <div>
+        <label>Reserva Fecha</label>
+        <input type="datetime-local" asp-for="Reserva.Fecha" />
+    </div>
+    <div>
+        <label>Entrenador</label>
+        <input type="text" asp-for="Reserva.Entrenador" />
+    </div>
+    <button type="submit">Agregar</button>
+</form>
