@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RGNRK.Data;
 
@@ -11,9 +12,11 @@ using RGNRK.Data;
 namespace RGNRK.Migrations
 {
     [DbContext(typeof(RGNRKContext))]
-    partial class RGNRKContextModelSnapshot : ModelSnapshot
+    [Migration("20240607100809_changesBenchmark2")]
+    partial class changesBenchmark2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,15 +178,9 @@ namespace RGNRK.Migrations
                     b.Property<int>("PersonalRecords")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ExerciseId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Benchmarks");
                 });
@@ -492,15 +489,7 @@ namespace RGNRK.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RGNRK.Data.User", "User")
-                        .WithMany("Benchmarks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Exercise");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RGNRK.Data.Exercise", b =>
@@ -561,8 +550,6 @@ namespace RGNRK.Migrations
 
             modelBuilder.Entity("RGNRK.Data.User", b =>
                 {
-                    b.Navigation("Benchmarks");
-
                     b.Navigation("Reservas");
                 });
 #pragma warning restore 612, 618

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RGNRK.Data;
 
@@ -11,9 +12,11 @@ using RGNRK.Data;
 namespace RGNRK.Migrations
 {
     [DbContext(typeof(RGNRKContext))]
-    partial class RGNRKContextModelSnapshot : ModelSnapshot
+    [Migration("20240607102855_changesBenchmark3")]
+    partial class changesBenchmark3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -493,7 +496,7 @@ namespace RGNRK.Migrations
                         .IsRequired();
 
                     b.HasOne("RGNRK.Data.User", "User")
-                        .WithMany("Benchmarks")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -561,8 +564,6 @@ namespace RGNRK.Migrations
 
             modelBuilder.Entity("RGNRK.Data.User", b =>
                 {
-                    b.Navigation("Benchmarks");
-
                     b.Navigation("Reservas");
                 });
 #pragma warning restore 612, 618

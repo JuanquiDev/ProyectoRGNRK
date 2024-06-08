@@ -58,8 +58,4 @@
     <_ContentIncludedByDefault Remove="Areas\Ejercicios\Pages\Exercises\Edit.cshtml" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Areas\Ejercicios\Pages\Exercises\Edit.cshtml" />
-  </ItemGroup>
-
 </Project>
