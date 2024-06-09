@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RGNRK.Data;
 
@@ -11,9 +12,11 @@ using RGNRK.Data;
 namespace RGNRK.Migrations
 {
     [DbContext(typeof(RGNRKContext))]
-    partial class RGNRKContextModelSnapshot : ModelSnapshot
+    [Migration("20240608110128_add-migration startdateworkout")]
+    partial class addmigrationstartdateworkout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -158,6 +161,22 @@ namespace RGNRK.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PersonalCalendar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PersonalCalendars");
+                });
+
             modelBuilder.Entity("RGNRK.Data.Benchmark", b =>
                 {
                     b.Property<int?>("Id")
@@ -257,61 +276,6 @@ namespace RGNRK.Migrations
                     b.ToTable("Exercises");
                 });
 
-            modelBuilder.Entity("RGNRK.Data.PersonalCalendar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PersonalCalendars");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.PersonalCalendarReserva", b =>
-                {
-                    b.Property<int>("PersonalCalendarId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReservaId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("ReservationDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("PersonalCalendarId", "ReservaId");
-
-                    b.HasIndex("ReservaId");
-
-                    b.ToTable("PersonalCalendarReservas");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.PersonalCalendarWorkout", b =>
-                {
-                    b.Property<int>("PersonalCalendarId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkoutId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("AddedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("PersonalCalendarId", "WorkoutId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("PersonalCalendarWorkouts");
-                });
-
             modelBuilder.Entity("RGNRK.Data.Reserva", b =>
                 {
                     b.Property<int>("Id")
@@ -320,32 +284,21 @@ namespace RGNRK.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("Entrenador")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<TimeSpan>("HoraFin")
-                        .HasColumnType("time(6)");
-
-                    b.Property<TimeSpan>("HoraInicio")
-                        .HasColumnType("time(6)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Titulo")
-                        .HasColumnType("longtext");
+                    b.Property<int?>("PersonalCalendarId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonalCalendarId");
 
                     b.HasIndex("UserId");
 
@@ -476,15 +429,17 @@ namespace RGNRK.Migrations
                     b.Property<int>("ExerciseId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int?>("PersonalCalendarId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("longtext");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExerciseId");
+
+                    b.HasIndex("PersonalCalendarId");
 
                     b.ToTable("Workouts");
                 });
@@ -576,46 +531,12 @@ namespace RGNRK.Migrations
                     b.Navigation("ExerciseVideo");
                 });
 
-            modelBuilder.Entity("RGNRK.Data.PersonalCalendarReserva", b =>
-                {
-                    b.HasOne("RGNRK.Data.PersonalCalendar", "PersonalCalendar")
-                        .WithMany("PersonalCalendarReservas")
-                        .HasForeignKey("PersonalCalendarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RGNRK.Data.Reserva", "Reserva")
-                        .WithMany("PersonalCalendarReservas")
-                        .HasForeignKey("ReservaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalCalendar");
-
-                    b.Navigation("Reserva");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.PersonalCalendarWorkout", b =>
-                {
-                    b.HasOne("RGNRK.Data.PersonalCalendar", "PersonalCalendar")
-                        .WithMany("PersonalCalendarWorkouts")
-                        .HasForeignKey("PersonalCalendarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RGNRK.Data.Workout", "Workout")
-                        .WithMany("PersonalCalendarWorkouts")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalCalendar");
-
-                    b.Navigation("Workout");
-                });
-
             modelBuilder.Entity("RGNRK.Data.Reserva", b =>
                 {
+                    b.HasOne("PersonalCalendar", null)
+                        .WithMany("Reservas")
+                        .HasForeignKey("PersonalCalendarId");
+
                     b.HasOne("RGNRK.Data.User", "User")
                         .WithMany("Reservas")
                         .HasForeignKey("UserId");
@@ -630,6 +551,17 @@ namespace RGNRK.Migrations
                         .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("PersonalCalendar", null)
+                        .WithMany("Workouts")
+                        .HasForeignKey("PersonalCalendarId");
+                });
+
+            modelBuilder.Entity("PersonalCalendar", b =>
+                {
+                    b.Navigation("Reservas");
+
+                    b.Navigation("Workouts");
                 });
 
             modelBuilder.Entity("RGNRK.Data.Category", b =>
@@ -644,28 +576,11 @@ namespace RGNRK.Migrations
                     b.Navigation("Workout");
                 });
 
-            modelBuilder.Entity("RGNRK.Data.PersonalCalendar", b =>
-                {
-                    b.Navigation("PersonalCalendarReservas");
-
-                    b.Navigation("PersonalCalendarWorkouts");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.Reserva", b =>
-                {
-                    b.Navigation("PersonalCalendarReservas");
-                });
-
             modelBuilder.Entity("RGNRK.Data.User", b =>
                 {
                     b.Navigation("Benchmarks");
 
                     b.Navigation("Reservas");
-                });
-
-            modelBuilder.Entity("RGNRK.Data.Workout", b =>
-                {
-                    b.Navigation("PersonalCalendarWorkouts");
                 });
 #pragma warning restore 612, 618
         }
