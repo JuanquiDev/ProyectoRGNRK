@@ -41,6 +41,8 @@ public class PersonalCalendarModel : PageModel
             }
         }
     }
+
+
     public async Task<IActionResult> OnPostDeleteReservaAsync(int reservaId)
     {
         var personalCalendarReserva = await _context.PersonalCalendarReservas
@@ -49,11 +51,19 @@ public class PersonalCalendarModel : PageModel
         if (personalCalendarReserva != null)
         {
             _context.PersonalCalendarReservas.Remove(personalCalendarReserva);
+
+            var reserva = await _context.Reservas.FirstOrDefaultAsync(r => r.Id == reservaId);
+            if (reserva != null)
+            {
+                _context.Reservas.Remove(reserva);
+            }
+
             await _context.SaveChangesAsync();
         }
 
         return RedirectToPage();
     }
+
 
     public async Task<IActionResult> OnPostDeleteWorkoutAsync(int workoutId)
     {

@@ -68,6 +68,9 @@ public class EntrenamientosModel : PageModel
 
             if (selectedExercise != null && selectedExercise.Workout != null && selectedExercise.Workout.Any())
             {
+                var workout = selectedExercise.Workout.First();
+                workout.StartDate = DateTime.Now; // Asigna la fecha actual a StartDate
+
                 var personalCalendarWorkout = new PersonalCalendarWorkout
                 {
                     PersonalCalendarId = personalCalendar.Id,
@@ -104,4 +107,5 @@ public class EntrenamientosModel : PageModel
 
         return RedirectToPage(new { SelectedExerciseId });
     }
+
 }
