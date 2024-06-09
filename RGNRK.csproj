@@ -56,6 +56,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Ejercicios\Pages\Exercises\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\PersonalCalendar.css" />
   </ItemGroup>
 
 </Project>

@@ -5,34 +5,9 @@
     ViewData["Title"] = "Calendario Personal";
     Layout = "_Layout";
 }
-<style>
-    #content {
-        display: flex;
-        margin: 20px; 
-        align-items: flex-start;
-        
-    }
-
-    #eventsTable {
-        text-align: center;
-        flex: 0.25;
-        justify-items: center;
-
-    }
-
-        #eventsTable td {
-            padding: 20px;
-            font-size: 15px;
-        }
-
-    #calendar {
-        width: 800px; 
-        margin: auto;
-    }
-</style>
+<link href="~/css/PersonalCalendar.css" rel="stylesheet">
 
 <h2>@ViewData["Title"]</h2>
-
 
 <div id="content">
     <table id="eventsTable">
@@ -42,6 +17,7 @@
                 <th>Tipo</th>
                 <th>Fecha</th>
                 <th>Descripción</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -52,6 +28,12 @@
                     <td>Workout</td>
                     <td>@Html.Encode(workout.StartDate?.ToString("yyyy-MM-dd"))</td>
                     <td>@Html.Encode(workout.Title)</td>
+                    <td>
+                        <form method="post" asp-page-handler="DeleteWorkout">
+                            <input type="hidden" name="workoutId" value="@workout.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             }
             @foreach (var reserva in Model.Reservas)
@@ -61,12 +43,20 @@
                     <td>Reserva</td>
                     <td>@Html.Encode(reserva.Fecha)</td>
                     <td>Entrenador: @Html.Encode(reserva.Entrenador)</td>
+                    <td>
+                        <form method="post" asp-page-handler="DeleteReserva">
+                            <input type="hidden" name="reservaId" value="@reserva.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <div id="calendar"></div>
+    <div id="calendarContainer">
+        <div id="calendar"></div>
+    </div>
 </div>
 
 @section Scripts {
@@ -102,7 +92,7 @@
             var calendarEl = document.getElementById('calendar');
 
             let calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'es', // Añade esta línea
+                locale: 'es',
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',

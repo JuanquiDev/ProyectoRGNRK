@@ -24,9 +24,11 @@
     .video-container {
         display: block; /* Cambiado a block para que el video se muestre */
         margin-top: 10px;
+        margin: 10px auto;
     }
 
     .video-title {
+        font-size: 24px; /* Ajusta esto al tamaño de fuente que prefieras */
         margin-top: 10px;
         font-weight: bold;
     }
@@ -38,55 +40,78 @@
         .table th, .table td {
             padding: 10px; /* Añadir padding a las celdas de la tabla */
         }
+
+    .category-container {
+        display: flex; /* Alinea las categorías horizontalmente */
+        justify-content: center; /* Centra las categorías en la ventana */
+        font-size: 50px;
+        text-shadow: 1px 1px 2px #000000;
+        width: 60%; /* Establece el ancho del contenedor de categorías */
+        margin: 50px auto; /* Centra el contenedor de categorías en la ventana */
+    }
+
+    .category-header {
+        margin: 0 10px; /* Añade un poco de margen a los lados para separar las categorías */
+    }
+
+    .exercise-list {
+        display: none;
+        width: 40%; /* Ajusta este valor al ancho que prefieras */
+        margin: 20px auto 90px;
+        background-color: #199DFC; /* Cambia el color de fondo de la lista de ejercicios */
+        border-radius: 10px; /* Añade bordes redondeados a la lista de ejercicios */
+        padding: 20px; /* Añade padding para darle espacio interno */
+    }
+
+    .exercise {
+        display: flex; /* Cambia a flex para alinear los elementos del ejercicio verticalmente */
+        flex-direction: column; /* Alinea los elementos del ejercicio en un formato de columna */
+        align-items: center; /* Centra los elementos del ejercicio en la ventana */
+        margin-bottom: 20px; /* Añade un poco de margen en la parte inferior para separar los ejercicios */
+    }
+
 </style>
 
-<h1 class="white-text">Ejercicios por Categoría</h1>
-
-@foreach (var category in Model.Categories)
-{
-    <div>
+<div class="category-container">
+    @foreach (var category in Model.Categories)
+    {
         <div class="category-header" onclick="toggleExercises('category-@category.Id')">
             @category.Name
         </div>
-        <div id="category-@category.Id" class="exercise-list">
-            <table class="table white-text">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Video</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var exercise in category.Exercises)
-                    {
-                        <tr>
-                            <td>@exercise.Name</td>
-                            <td>@exercise.Description</td>
-                            <td>
-                                <div id="video-@exercise.Id" class="video-container">
-                                    <iframe width="560" height="315" src="@exercise.ExerciseVideo.Url" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                                    <div class="video-title">
-                                        <a href="@exercise.ExerciseVideo.Url" target="_blank">@exercise.ExerciseVideo.Title</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    }
+</div>
+
+@foreach (var category in Model.Categories)
+{
+    <div id="category-@category.Id" class="exercise-list">
+        @foreach (var exercise in category.Exercises)
+        {
+            <div class="exercise">
+                <div class="video-title">
+                    @exercise.Name
+                </div>
+                <div id="video-@exercise.Id" class="video-container">
+                    <iframe width="560" height="315" src="@exercise.ExerciseVideo.Url" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="video-description">
+                    @exercise.Description
+                </div>
+            </div>
+        }
     </div>
 }
 
 <script>
     function toggleExercises(id) {
-        var element = document.getElementById(id);
-        if (element.style.display === "none") {
-            element.style.display = "block";
-        } else {
-            element.style.display = "none";
+        // Cierra todas las listas de ejercicios
+        var exerciseLists = document.getElementsByClassName('exercise-list');
+        for (var i = 0; i < exerciseLists.length; i++) {
+            exerciseLists[i].style.display = "none";
         }
+
+        // Abre la lista de ejercicios seleccionada
+        var element = document.getElementById(id);
+        element.style.display = "block";
     }
 
     function toggleVideo(id) {

@@ -8,57 +8,128 @@
 
 <h2>Benchmarks</h2>
 
-<div class="benchmark-list">
-    <form method="post">
-        @Html.AntiForgeryToken()
-        <table>
-            <thead>
-                <tr>
-                    <th>Exercise</th>
-                    <th>Record (kg)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var exercise in Model.Exercises)
-                {
+<div class="benchmark-container">
+    <div class="benchmark-list">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <table class="styled-table">
+                <thead>
                     <tr>
-                        <td>
-                            <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].ExerciseId" value="@exercise.Id" />
-                            <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
-                            <input type="text" readonly value="@exercise.Name" />
-                        </td>
-                        <td>
-                            @if (exercise.Benchmarks.Any())
-                            {
-                                var benchmark = exercise.Benchmarks.FirstOrDefault();
-                                <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="@benchmark.PersonalRecords" />
-                            }
-                            else
-                            {
-                                <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="" />
-                            }
-                        </td>
-                        <td>
-                            <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                        </td>
+                        <th>Ejercicio</th>
+                        <th>Record (kg)</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <button type="submit">Save</button>
-    </form>
+                </thead>
+                <tbody>
+                    @foreach (var exercise in Model.Exercises)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].ExerciseId" value="@exercise.Id" />
+                                <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+                                <input type="text" readonly value="@exercise.Name" class="exercise-name" />
+                            </td>
+                            <td>
+                                @if (exercise.Benchmarks.Any())
+                                {
+                                    var benchmark = exercise.Benchmarks.FirstOrDefault();
+                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="@benchmark.PersonalRecords" class="record-input" />
+                                }
+                                else
+                                {
+                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="" class="record-input" />
+                                }
+                            </td>
+                            <td>
+                                <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button type="submit" class="btn-save">Guardar</button>
+        </form>
+    </div>
 </div>
 
 <style>
-    .benchmark-list {
+    body {
         font-family: 'Inter', sans-serif;
-        font-size: 1.2rem;
+        background-color: #1e1e1e;
         color: white;
-        text-align: left;
-        margin: 20px;
     }
 
-    .btn-bnch {
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+        font-size:50px;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+    .benchmark-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .benchmark-list {
+        font-size: 1.2rem;
+        text-align: left;
+        width: 80%;
+        max-width: 800px;
+        background-color: #333;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .styled-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 1.2rem;
+        min-width: 400px;
+    }
+
+        .styled-table thead tr {
+            background-color: #199DFC;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+            .styled-table tbody tr:last-of-type {
+                border-bottom: 2px solid #199DFC;
+            }
+
+    .exercise-name {
+        background-color: #444;
+        color: white;
+        border: none;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 5px;
+    }
+
+    .record-input {
+        background-color: #fff;
+        color: black;
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 5px;
+        border: 2px solid #199DFC;
+    }
+
+    .btn-save {
         background-color: #199DFC;
         color: white;
         border: none;
@@ -66,12 +137,12 @@
         padding: 10px 20px;
         font-size: 1.2rem;
         text-decoration: none;
-        display: inline-block;
-        margin-top: 20px;
+        display: block;
+        margin: 20px auto;
+        cursor: pointer;
     }
 
-        .btn-bnch:hover {
-            color: #D3D3D3;
-            text-decoration: none;
+        .btn-save:hover {
+            background-color: #17a2b8;
         }
 </style>

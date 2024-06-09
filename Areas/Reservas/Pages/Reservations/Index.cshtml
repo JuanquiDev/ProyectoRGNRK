@@ -27,40 +27,220 @@
 
 <h2>Reservas</h2>
 
-<form method="get" asp-page-handler="OnGet">
-    <label for="selectedDate">Selecciona una fecha:</label>
-    <input type="date" id="selectedDate" name="selectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" class="form-control" onchange="this.form.submit()" />
-</form>
+<div class="reservation-form">
+    <form method="get" asp-page-handler="OnGet">
+        <label for="selectedDate">Selecciona una fecha:</label>
+        <input type="date" id="selectedDate" name="selectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" class="form-control datepicker" onchange="this.form.submit()" />
+    </form>
+</div>
 
 <h3>Horas disponibles para @Model.SelectedDate.ToString("d")</h3>
 
-@foreach (var slot in Model.AvailableSlots)
-{
-    <div class="mb-2">
-        <span>@slot.ToString("HH:mm") - @slot.AddHours(1).ToString("HH:mm")</span>
-        <form method="post" class="d-inline">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="slot" value="@slot.ToString("O")" />
-            <input type="hidden" name="horaInicio" value="@slot.TimeOfDay.ToString()" />
-            <input type="hidden" name="horaFin" value="@slot.AddHours(1).TimeOfDay.ToString()" />
-            <select name="entrenador" required class="form-select">
-                <option value="">Selecciona un entrenador</option>
-                @foreach (var timeSlot in Model.AvailableTrainers)
-                {
-                    if (timeSlot.Key == slot.TimeOfDay)
-                    {
-                        foreach (var entrenador in timeSlot.Value)
-                        {
-                            var isReserved = Model.ReservedSlots.Any(r => r.HoraInicio == slot.TimeOfDay && r.HoraFin == slot.AddHours(1).TimeOfDay && r.Entrenador == entrenador);
-                            if (!isReserved)
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-5 mb-2">
+            @for (int i = 0; i < Model.AvailableSlots.Count / 2; i++)
+            {
+                var slot = Model.AvailableSlots[i];
+                <div class="d-flex align-items-center mb-2">
+                    <span class="time-slot">@slot.ToString("HH:mm") - @slot.AddHours(1).ToString("HH:mm")</span>
+                    <form method="post" class="d-inline ml-auto d-flex align-items-center">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="slot" value="@slot.ToString("O")" />
+                        <input type="hidden" name="horaInicio" value="@slot.TimeOfDay.ToString()" />
+                        <input type="hidden" name="horaFin" value="@slot.AddHours(1).TimeOfDay.ToString()" />
+                        <select name="entrenador" required class="form-select trainer-select">
+                            <option value="">Selecciona un entrenador</option>
+                            @foreach (var timeSlot in Model.AvailableTrainers)
                             {
-                                <option value="@entrenador">@entrenador</option>
+                                if (timeSlot.Key == slot.TimeOfDay)
+                                {
+                                    foreach (var entrenador in timeSlot.Value)
+                                    {
+                                        var isReserved = Model.ReservedSlots.Any(r => r.HoraInicio == slot.TimeOfDay && r.HoraFin == slot.AddHours(1).TimeOfDay && r.Entrenador == entrenador);
+                                        if (!isReserved)
+                                        {
+                                            <option value="@entrenador">@entrenador</option>
+                                        }
+                                    }
+                                }
                             }
-                        }
-                    }
-                }
-            </select>
-            <button type="submit" class="btn btn-primary">Reservar</button>
-        </form>
+                        </select>
+                        <button type="submit" class="btn btn-primary ml-2">Reservar</button>
+                    </form>
+                </div>
+            }
+        </div>
+        <div class="vertical-line"></div>
+        <div class="col-md-5 mb-2">
+            @for (int i = Model.AvailableSlots.Count / 2; i < Model.AvailableSlots.Count; i++)
+            {
+                var slot = Model.AvailableSlots[i];
+                <div class="d-flex align-items-center mb-2">
+                    <span class="time-slot">@slot.ToString("HH:mm") - @slot.AddHours(1).ToString("HH:mm")</span>
+                    <form method="post" class="d-inline ml-auto d-flex align-items-center">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="slot" value="@slot.ToString("O")" />
+                        <input type="hidden" name="horaInicio" value="@slot.TimeOfDay.ToString()" />
+                        <input type="hidden" name="horaFin" value="@slot.AddHours(1).TimeOfDay.ToString()" />
+                        <select name="entrenador" required class="form-select trainer-select">
+                            <option value="">Selecciona un entrenador</option>
+                            @foreach (var timeSlot in Model.AvailableTrainers)
+                            {
+                                if (timeSlot.Key == slot.TimeOfDay)
+                                {
+                                    foreach (var entrenador in timeSlot.Value)
+                                    {
+                                        var isReserved = Model.ReservedSlots.Any(r => r.HoraInicio == slot.TimeOfDay && r.HoraFin == slot.AddHours(1).TimeOfDay && r.Entrenador == entrenador);
+                                        if (!isReserved)
+                                        {
+                                            <option value="@entrenador">@entrenador</option>
+                                        }
+                                    }
+                                }
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-primary ml-2">Reservar</button>
+                    </form>
+                </div>
+            }
+        </div>
     </div>
-}
+</div>
+
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #1e1e1e;
+        color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .reservation-form {
+        margin: 20px auto;
+        width: 50%;
+        text-align: center;
+        padding: 0 20px;
+    }
+
+        .reservation-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+    .datepicker {
+        width: 60%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 2px solid #199DFC;
+        display: block;
+        margin: 0 auto;
+    }
+
+    h3 {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .container {
+        margin-bottom: 150px;
+    }
+
+    .col-md-5 {
+        margin-bottom: 20px;
+    }
+
+    .form-select {
+        padding: 10px;
+        border-radius: 5px;
+        border: 2px solid #199DFC;
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+    .trainer-select {
+        width: 200px; /* Adjusted width for trainer select */
+    }
+
+    .btn-primary {
+        background-color: #199DFC;
+        color: white;
+        border: none;
+        border-radius: 7px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-left: 10px;
+        flex-shrink: 0;
+    }
+
+        .btn-primary:hover {
+            background-color: #17a2b8;
+        }
+
+    .time-slot {
+        margin-right: 10px; /* Ensure the time slot is on the left */
+        width: 100px; /* Fixed width for the time slot */
+    }
+
+    .row {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .vertical-line {
+        border-left: 2px solid #199DFC;
+        height: 100%;
+        margin: 0 20px;
+    }
+
+    .alert {
+        width: 60%;
+        margin: 20px auto;
+        padding: 15px;
+        border-radius: 5px;
+        text-align: center;
+        position: relative;
+        z-index: 1050;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
+    }
+
+    .navbar {
+        margin-bottom: 20px; /* Add some space below the navbar */
+    }
+
+    /* Adding top margin to ensure alerts are visible */
+    .content {
+        margin-top: 80px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var selectedDate = document.getElementById('selectedDate');
+        selectedDate.addEventListener('change', function () {
+            this.form.submit();
+        });
+    });
+</script>

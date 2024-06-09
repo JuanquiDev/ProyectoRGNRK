@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RGNRK.Data;
@@ -39,5 +40,32 @@ public class PersonalCalendarModel : PageModel
                 Reservas = personalCalendar.PersonalCalendarReservas.Select(pcr => pcr.Reserva).ToList();
             }
         }
+    }
+    public async Task<IActionResult> OnPostDeleteReservaAsync(int reservaId)
+    {
+        var personalCalendarReserva = await _context.PersonalCalendarReservas
+            .FirstOrDefaultAsync(pcr => pcr.ReservaId == reservaId);
+
+        if (personalCalendarReserva != null)
+        {
+            _context.PersonalCalendarReservas.Remove(personalCalendarReserva);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteWorkoutAsync(int workoutId)
+    {
+        var personalCalendarWorkout = await _context.PersonalCalendarWorkouts
+            .FirstOrDefaultAsync(pcw => pcw.WorkoutId == workoutId);
+
+        if (personalCalendarWorkout != null)
+        {
+            _context.PersonalCalendarWorkouts.Remove(personalCalendarWorkout);
+            await _context.SaveChangesAsync();
+        }
+
+        return RedirectToPage();
     }
 }
