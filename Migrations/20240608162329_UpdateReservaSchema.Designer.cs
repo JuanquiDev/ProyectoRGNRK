@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RGNRK.Data;
 
@@ -11,9 +12,11 @@ using RGNRK.Data;
 namespace RGNRK.Migrations
 {
     [DbContext(typeof(RGNRKContext))]
-    partial class RGNRKContextModelSnapshot : ModelSnapshot
+    [Migration("20240608162329_UpdateReservaSchema")]
+    partial class UpdateReservaSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,9 +287,6 @@ namespace RGNRK.Migrations
                     b.Property<DateTime>("AddedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("ReservationDate")
-                        .HasColumnType("datetime(6)");
-
                     b.HasKey("PersonalCalendarId", "ReservaId");
 
                     b.HasIndex("ReservaId");
@@ -324,17 +324,10 @@ namespace RGNRK.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Entrenador")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<TimeSpan>("HoraFin")
-                        .HasColumnType("time(6)");
-
-                    b.Property<TimeSpan>("HoraInicio")
-                        .HasColumnType("time(6)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime(6)");
