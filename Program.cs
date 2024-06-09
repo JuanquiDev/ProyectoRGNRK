@@ -2,48 +2,58 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PE_ServicesClassRCL.Models.Permission;
+using RGNRK.Areas.Reservas.Pages.Reservations;
 using RGNRK.Configuracion;
 using RGNRK.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
-builder.Services.AddAuthentication()
-        .AddGoogle(options =>
-        {
-            options.ClientId = builder.Configuration["GoogleConnection:ClientId"];
-            options.ClientSecret = builder.Configuration["GoogleConnection:ClientSecret"];
-        });
+builder.Services.AddRazorPages()
+    .AddRazorPagesOptions(options =>
+    {
+        options.Conventions.AuthorizeAreaFolder("PersonalCalendar", "/");
+    });
 
 builder.Services.AddAuthentication()
-        .AddMicrosoftAccount(options =>
-        {
-            options.ClientId = builder.Configuration["MicrosoftConnection:ClientId"];
-            options.ClientSecret = builder.Configuration["MicrosoftConnection:ClientSecret"];
-        });
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["GoogleConnection:ClientId"];
+        options.ClientSecret = builder.Configuration["GoogleConnection:ClientSecret"];
+    });
+
 builder.Services.AddAuthentication()
-        .AddTwitter(options =>
-        {
-            options.ConsumerKey = builder.Configuration["TwitterConnection:APIKey"];
-            options.ConsumerSecret = builder.Configuration["TwitterConnection:APIKeySecret"];
-            options.CallbackPath = new PathString("/signin-twitter");
-        });
+    .AddMicrosoftAccount(options =>
+    {
+        options.ClientId = builder.Configuration["MicrosoftConnection:ClientId"];
+        options.ClientSecret = builder.Configuration["MicrosoftConnection:ClientSecret"];
+    });
+
+builder.Services.AddAuthentication()
+    .AddTwitter(options =>
+    {
+        options.ConsumerKey = builder.Configuration["TwitterConnection:APIKey"];
+        options.ConsumerSecret = builder.Configuration["TwitterConnection:APIKeySecret"];
+        options.CallbackPath = new PathString("/signin-twitter");
+    });
 
 var serverVersion = ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("RGNRKContextConnection"));
 builder.Services.AddDbContext<RGNRKContext>(options =>
-options.UseMySql(
-    builder.Configuration.GetConnectionString("RGNRKContextConnection"), serverVersion, mySqlOptionsAction: sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(
-            maxRetryCount: 10,
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null);
-    }));
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("RGNRKContextConnection"), serverVersion, mySqlOptionsAction: sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 10,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+        }));
 
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<RGNRKContext>();
+
+// Registrar el ReservaService
+builder.Services.AddScoped<ReservaService>();
 
 var app = builder.Build();
 
@@ -51,7 +61,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -60,10 +69,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication(); // Add this line
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 using (var scope = app.Services.CreateScope())
 {
@@ -89,16 +101,16 @@ using (var scope = app.Services.CreateScope())
 
     if (await userManager.FindByEmailAsync(email) == null)
     {
-        var user = new User();
-        user.UserName = email;
-        user.Email = email;
+        var user = new User
+        {
+            UserName = email,
+            Email = email
+        };
 
         await userManager.CreateAsync(user, password);
 
         await userManager.AddToRoleAsync(user, "Admin");
     }
-
 }
-
 
 app.Run();

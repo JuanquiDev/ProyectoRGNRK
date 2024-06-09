@@ -19,7 +19,7 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
             _context = context;
             AvailableSlots = new List<DateTime>();
             ReservedSlots = new List<Reserva>();
-            AvailableTrainers = new Dictionary<TimeSpan, List<Reserva.EntrenadorNombre>>(); // Debe ser un diccionario
+            AvailableTrainers = new Dictionary<TimeSpan, List<Reserva.EntrenadorNombre>>();
         }
 
         [BindProperty(SupportsGet = true)]
@@ -27,19 +27,26 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
 
         public List<DateTime> AvailableSlots { get; set; }
         public List<Reserva> ReservedSlots { get; set; }
+        public Dictionary<TimeSpan, List<Reserva.EntrenadorNombre>> AvailableTrainers { get; set; }
 
-
-        public Dictionary<TimeSpan, List<Reserva.EntrenadorNombre>> AvailableTrainers { get; set; } 
-
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(DateTime? selectedDate)
         {
+            if (selectedDate.HasValue)
+            {
+                SelectedDate = selectedDate.Value;
+            }
+            else
+            {
+                SelectedDate = DateTime.Today;
+            }
+
             // Get available and reserved slots
             AvailableSlots = GetAvailableSlots(SelectedDate);
             ReservedSlots = await GetReservedSlotsAsync(SelectedDate);
 
             // Define timeStart and timeEnd
             var timeStart = new TimeSpan(9, 0, 0); // 9 AM
-            var timeEnd = new TimeSpan(21, 0, 0); // 5 PM
+            var timeEnd = new TimeSpan(21, 0, 0); // 9 PM
 
             // Get available trainers
             AvailableTrainers = await GetAvailableTrainersAsync(SelectedDate, timeStart, timeEnd);
@@ -50,13 +57,13 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
             // Parse horaInicio and horaFin to TimeSpan
             var timeStart = TimeSpan.Parse(horaInicio);
             var timeEnd = TimeSpan.Parse(horaFin);
-            var allReservations = await _context.Reservas.ToListAsync();
+
             // Check if the trainer is already booked at the same time
             var isTrainerBooked = await _context.Reservas.AnyAsync(r => r.Entrenador == entrenador && r.Fecha.Date == slot.Date && r.HoraInicio == timeStart && r.HoraFin == timeEnd);
             if (isTrainerBooked)
             {
                 TempData["ErrorMessage"] = "Este entrenador ya ha sido reservado para este horario.";
-                return RedirectToPage(new { date = SelectedDate.ToString("yyyy-MM-dd") });
+                return RedirectToPage(new { selectedDate = SelectedDate.ToString("yyyy-MM-dd") });
             }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -83,8 +90,8 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
                 Fecha = slot,
                 StartDate = slot,
                 EndDate = slot.AddHours(1), // Assuming each slot is 1 hour long
-                HoraInicio = slot.TimeOfDay, // Set HoraInicio to the time of the slot
-                HoraFin = slot.AddHours(1).TimeOfDay, // Set HoraFin to one hour after the slot
+                HoraInicio = slot.TimeOfDay,
+                HoraFin = slot.AddHours(1).TimeOfDay,
                 UserId = userId,
                 User = user,
                 Entrenador = entrenador,
@@ -107,7 +114,7 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Reserva realizada con éxito.";
-            return RedirectToPage(new { date = SelectedDate.ToString("yyyy-MM-dd") });
+            return RedirectToPage(new { selectedDate = SelectedDate.ToString("yyyy-MM-dd") });
         }
 
         private List<DateTime> GetAvailableSlots(DateTime date)
@@ -120,6 +127,7 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
             }
             return slots;
         }
+
         private async Task<Dictionary<TimeSpan, List<Reserva.EntrenadorNombre>>> GetAvailableTrainersAsync(DateTime date, TimeSpan timeStart, TimeSpan timeEnd)
         {
             // Get all trainers
@@ -160,3 +168,4 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
         }
     }
 }
+

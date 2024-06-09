@@ -27,9 +27,9 @@
 
 <h2>Reservas</h2>
 
-<form method="get">
+<form method="get" asp-page-handler="OnGet">
     <label for="selectedDate">Selecciona una fecha:</label>
-    <input type="date" id="selectedDate" name="date" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" onchange="this.form.submit()" />
+    <input type="date" id="selectedDate" name="selectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" class="form-control" onchange="this.form.submit()" />
 </form>
 
 <h3>Horas disponibles para @Model.SelectedDate.ToString("d")</h3>
@@ -43,7 +43,7 @@
             <input type="hidden" name="slot" value="@slot.ToString("O")" />
             <input type="hidden" name="horaInicio" value="@slot.TimeOfDay.ToString()" />
             <input type="hidden" name="horaFin" value="@slot.AddHours(1).TimeOfDay.ToString()" />
-            <select name="entrenador" required>
+            <select name="entrenador" required class="form-select">
                 <option value="">Selecciona un entrenador</option>
                 @foreach (var timeSlot in Model.AvailableTrainers)
                 {
@@ -64,6 +64,3 @@
         </form>
     </div>
 }
-
-
-
