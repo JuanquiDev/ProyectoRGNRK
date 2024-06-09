@@ -52,8 +52,6 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<RGNRKContext>();
 
-// Registrar el ReservaService
-builder.Services.AddScoped<ReservaService>();
 
 var app = builder.Build();
 

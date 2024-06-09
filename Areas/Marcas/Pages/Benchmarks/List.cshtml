@@ -6,6 +6,9 @@
     Layout = "_Layout";
 }
 
+<link href="~/css/Benchmarks.css" rel="stylesheet">
+
+
 <h2>Benchmarks</h2>
 
 <div class="benchmark-container">
@@ -32,11 +35,11 @@
                                 @if (exercise.Benchmarks.Any())
                                 {
                                     var benchmark = exercise.Benchmarks.FirstOrDefault();
-                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="@benchmark.PersonalRecords" class="record-input" />
+                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="@benchmark.PersonalRecords" class="record-input" required min="1" />
                                 }
                                 else
                                 {
-                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="" class="record-input" />
+                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="" class="record-input" required min="1" />
                                 }
                             </td>
                             <td>
@@ -47,102 +50,16 @@
                 </tbody>
             </table>
             <button type="submit" class="btn-save">Guardar</button>
-        </form>
-    </div>
-</div>
 
-<style>
-    body {
-        font-family: 'Inter', sans-serif;
-        background-color: #1e1e1e;
-        color: white;
-    }
-
-    h2 {
-        text-align: center;
-        margin-top: 20px;
-        font-size:50px;
-        text-shadow: 1px 1px 2px #000000;
-    }
-
-    .benchmark-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    .benchmark-list {
-        font-size: 1.2rem;
-        text-align: left;
-        width: 80%;
-        max-width: 800px;
-        background-color: #333;
-        padding: 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .styled-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 1.2rem;
-        min-width: 400px;
-    }
-
-        .styled-table thead tr {
-            background-color: #199DFC;
-            color: #ffffff;
-            text-align: left;
-        }
-
-        .styled-table th, .styled-table td {
-            padding: 12px 15px;
-        }
-
-        .styled-table tbody tr {
-            border-bottom: 1px solid #dddddd;
-        }
-
-            .styled-table tbody tr:last-of-type {
-                border-bottom: 2px solid #199DFC;
-            }
-
-    .exercise-name {
-        background-color: #444;
-        color: white;
-        border: none;
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 5px;
-    }
-
-    .record-input {
-        background-color: #fff;
-        color: black;
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 5px;
-        border: 2px solid #199DFC;
-    }
-
-    .btn-save {
-        background-color: #199DFC;
-        color: white;
-        border: none;
-        border-radius: 7px;
-        padding: 10px 20px;
-        font-size: 1.2rem;
-        text-decoration: none;
-        display: block;
-        margin: 20px auto;
-        cursor: pointer;
-    }
-
-        .btn-save:hover {
-            background-color: #17a2b8;
-        }
-</style>
+            <script>
+                document.querySelector('form').addEventListener('submit', function (event) {
+                    var inputs = document.querySelectorAll('.record-input');
+                    for (var i = 0; i < inputs.length; i++) {
+                        if (inputs[i].value === '' || inputs[i].value <= 0) {
+                            alert('Por favor, introduce un valor mayor a 0 para todos los registros personales.');
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                });
+            </script>
