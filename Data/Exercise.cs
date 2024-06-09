@@ -8,8 +8,8 @@
         public Video? ExerciseVideo { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-        
-        public virtual List<Benchmarks> Benchmarks { get; set; }
+
+        public virtual List<Benchmark> Benchmarks { get; set; }
         public virtual List<Workout> Workout { get; set; }
     }
 }

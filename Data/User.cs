@@ -28,6 +28,8 @@ namespace RGNRK.Data
         public Category UserCategory { get; set; }
 
         public virtual ICollection<Reserva>? Reservas { get; set; }
+        public virtual ICollection<Benchmark>? Benchmarks { get; set; }  
+
     }
 
     public class Reserva

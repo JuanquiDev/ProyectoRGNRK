@@ -15,6 +15,15 @@
                        User.IsInRole(Permissions.Manager_Role) ||
                        User.IsInRole(Permissions.Coach_Role);
 }
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
 <div class="container">
     <div class="row">
@@ -22,11 +31,19 @@
             <h3>Entrenamiento</h3>
             @if (Model.SelectedExercise != null && Model.SelectedExercise.Workout.Any())
             {
-                <h4>Entrenamiento: @Model.SelectedExercise.Workout.First().Description</h4>
+                @Html.Raw(Model.SelectedExercise.Workout.First().Description)
+
                 @if (isAuthorized)
                 {
                     <a href="/Entrenamientos/Workouts/Edit?WorkoutId=@Model.SelectedExercise.Workout.First().Id" class="btn btn-primary">Editar Descripción</a>
                 }
+                <form method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="SelectedExerciseId" />
+                    <input type="hidden" name="actionType" value="addToCalendar" />
+                    <input type="hidden" name="workoutId" value="@Model.SelectedExercise.Workout.First().Id" />
+                    <button type="submit" class="btn btn-primary">Añadir a mi calendario</button>
+                </form>
             }
         </div>
         <div class="col-md-6">
@@ -46,13 +63,11 @@
                     @if (Model.SelectedExercise != null)
                     {
                     <h4>@Model.SelectedExercise.Name</h4>
-                    <p>@Model.SelectedExercise.Description</p>
                         @if (Model.SelectedExercise.ExerciseVideo != null)
                         {
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe class="embed-responsive-item" src="@Model.SelectedExercise.ExerciseVideo.Url" allowfullscreen></iframe>
                         </div>
-                        <a href="@Model.SelectedExercise.ExerciseVideo.Url" class="btn btn-link">Aprender el movimiento</a>
                         }
                     }
                     else

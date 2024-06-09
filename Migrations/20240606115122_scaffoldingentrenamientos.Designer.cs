@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RGNRK.Data;
 
@@ -11,16 +12,33 @@ using RGNRK.Data;
 namespace RGNRK.Migrations
 {
     [DbContext(typeof(RGNRKContext))]
-    partial class RGNRKContextModelSnapshot : ModelSnapshot
+    [Migration("20240606115122_scaffoldingentrenamientos")]
+    partial class scaffoldingentrenamientos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("BenchmarksExercise", b =>
+                {
+                    b.Property<int>("BenchmarksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExerciseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BenchmarksId", "ExerciseId");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("BenchmarksExercise");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -158,7 +176,7 @@ namespace RGNRK.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RGNRK.Data.Benchmark", b =>
+            modelBuilder.Entity("RGNRK.Data.Benchmarks", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -169,21 +187,10 @@ namespace RGNRK.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("ExerciseId")
+                    b.Property<int>("personalRecords")
                         .HasColumnType("int");
-
-                    b.Property<int>("PersonalRecords")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ExerciseId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Benchmarks");
                 });
@@ -412,6 +419,7 @@ namespace RGNRK.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(3000)
                         .HasColumnType("varchar(3000)");
 
@@ -431,6 +439,21 @@ namespace RGNRK.Migrations
                     b.HasIndex("PersonalCalendarId");
 
                     b.ToTable("Workouts");
+                });
+
+            modelBuilder.Entity("BenchmarksExercise", b =>
+                {
+                    b.HasOne("RGNRK.Data.Benchmarks", null)
+                        .WithMany()
+                        .HasForeignKey("BenchmarksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RGNRK.Data.Exercise", null)
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -484,25 +507,6 @@ namespace RGNRK.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RGNRK.Data.Benchmark", b =>
-                {
-                    b.HasOne("RGNRK.Data.Exercise", "Exercise")
-                        .WithMany("Benchmarks")
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("RGNRK.Data.User", "User")
-                        .WithMany("Benchmarks")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exercise");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RGNRK.Data.Exercise", b =>
                 {
                     b.HasOne("RGNRK.Data.Category", "Category")
@@ -549,8 +553,6 @@ namespace RGNRK.Migrations
 
             modelBuilder.Entity("RGNRK.Data.Exercise", b =>
                 {
-                    b.Navigation("Benchmarks");
-
                     b.Navigation("Workout");
                 });
 
@@ -561,8 +563,6 @@ namespace RGNRK.Migrations
 
             modelBuilder.Entity("RGNRK.Data.User", b =>
                 {
-                    b.Navigation("Benchmarks");
-
                     b.Navigation("Reservas");
                 });
 #pragma warning restore 612, 618

@@ -1,0 +1,69 @@
+﻿@page
+@model RGNRK.Areas.Reservas.Pages.Reservations.ReservasModel
+@{
+    ViewData["Title"] = "Reservas";
+    Layout = "_Layout";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<h2>Reservas</h2>
+
+<form method="get">
+    <label for="selectedDate">Selecciona una fecha:</label>
+    <input type="date" id="selectedDate" name="date" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" onchange="this.form.submit()" />
+</form>
+
+<h3>Horas disponibles para @Model.SelectedDate.ToString("d")</h3>
+
+@foreach (var slot in Model.AvailableSlots)
+{
+    <div class="mb-2">
+        <span>@slot.ToString("HH:mm") - @slot.AddHours(1).ToString("HH:mm")</span>
+        <form method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="slot" value="@slot.ToString("O")" />
+            <input type="hidden" name="horaInicio" value="@slot.TimeOfDay.ToString()" />
+            <input type="hidden" name="horaFin" value="@slot.AddHours(1).TimeOfDay.ToString()" />
+            <select name="entrenador" required>
+                <option value="">Selecciona un entrenador</option>
+                @foreach (var timeSlot in Model.AvailableTrainers)
+                {
+                    if (timeSlot.Key == slot.TimeOfDay)
+                    {
+                        foreach (var entrenador in timeSlot.Value)
+                        {
+                            var isReserved = Model.ReservedSlots.Any(r => r.HoraInicio == slot.TimeOfDay && r.HoraFin == slot.AddHours(1).TimeOfDay && r.Entrenador == entrenador);
+                            if (!isReserved)
+                            {
+                                <option value="@entrenador">@entrenador</option>
+                            }
+                        }
+                    }
+                }
+            </select>
+            <button type="submit" class="btn btn-primary">Reservar</button>
+        </form>
+    </div>
+}
+
+
+

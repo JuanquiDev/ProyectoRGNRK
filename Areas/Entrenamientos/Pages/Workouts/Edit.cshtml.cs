@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RGNRK.Data;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 public class EditModel : PageModel
 {
@@ -27,9 +29,10 @@ public class EditModel : PageModel
         return Page();
     }
 
+    
+
     public async Task<IActionResult> OnPostAsync()
     {
-        Console.WriteLine("OnPost llamado");
 
         if (!ModelState.IsValid)
         {
@@ -50,6 +53,6 @@ public class EditModel : PageModel
         _context.Workouts.Update(workoutToUpdate);
         await _context.SaveChangesAsync();
 
-        return RedirectToPage("/Entrenamientos/Workouts/List");
+        return RedirectToPage("/Workouts/List", new {area = "Entrenamientos", SelectedExerciseId = Workout.ExerciseId });
     }
 }
