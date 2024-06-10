@@ -58,6 +58,16 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
             var timeStart = TimeSpan.Parse(horaInicio);
             var timeEnd = TimeSpan.Parse(horaFin);
 
+            // Check if the slot is in the past
+            var currentTime = DateTime.Now;
+            var reservationTime = new DateTime(slot.Year, slot.Month, slot.Day, timeStart.Hours, timeStart.Minutes, timeStart.Seconds);
+
+            if (reservationTime < currentTime)
+            {
+                TempData["ErrorMessage"] = "No puedes hacer una reserva en un tiempo pasado.";
+                return RedirectToPage(new { selectedDate = SelectedDate.ToString("yyyy-MM-dd") });
+            }
+
             // Check if the trainer is already booked at the same time
             var isTrainerBooked = await _context.Reservas.AnyAsync(r => r.Entrenador == entrenador && r.Fecha.Date == slot.Date && r.HoraInicio == timeStart && r.HoraFin == timeEnd);
             if (isTrainerBooked)
@@ -168,4 +178,3 @@ namespace RGNRK.Areas.Reservas.Pages.Reservations
         }
     }
 }
-
