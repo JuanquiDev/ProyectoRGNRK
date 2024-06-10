@@ -1,11 +1,12 @@
 ﻿body {
+    font-family: 'Inter', sans-serif;
+    background-color: #000;
+    color: #fff;
 }
 
 .title {
-    font-family: 'Inter', sans-serif;
     font-weight: 500;
     font-size: 75px;
-    color: white;
     text-shadow: 1px 1px 2px #000000;
     text-align: center;
     position: absolute;
@@ -15,14 +16,12 @@
 }
 
 .subtitle {
-    font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 120px; 
-    color: white;
+    font-size: 120px;
     text-shadow: 1px 1px 2px #000000;
     text-align: center;
     position: absolute;
-    top: 50%; 
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
@@ -54,7 +53,6 @@
 .image-container {
     position: relative;
     text-align: center;
-    color: white;
 }
 
     .image-container img {
@@ -64,16 +62,177 @@
     }
 
 .description {
-    font-family: 'Inter', sans-serif;
     font-size: 25px;
-    color: white;
     text-align: left;
-    margin-top: 100px;
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-bottom: 100px;
-    width: 65%;
+    margin: 100px 20% 100px 20%;
+    width: 60%;
 }
+
+/* Beneficios */
+.benefits {
+    display: flex;
+    justify-content: space-around;
+    margin: 50px 0;
+    padding: 30px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 50px;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.benefit-item {
+    max-width: 45%;
+}
+
+    .benefit-item img {
+        width: 100%;
+        height: auto;
+    }
+
+.benefit-text {
+    margin-top: 20px;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+    .benefit-text h3 {
+        text-align: center;
+        font-size: 35px;
+    }
+
+    .benefit-text p {
+        padding: 50px;
+        font-size: 20px;
+    }
+
+.button {
+    background-color: #199DFC;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+    .button:hover {
+        color: #444;
+        text-decoration: none;
+    }
+
+/* Coaches */
+.coaches {
+    text-align: center;
+    margin: 50px 0;
+}
+
+.coach-item {
+    display: inline-block;
+    width: 32%;
+    margin: 20px;
+}
+
+    .coach-item img {
+        width: 25%;
+        height: auto;
+        border-radius: 50%;
+    }
+
+.coach-info {
+    margin-top: 20px;
+}
+
+    .coach-info h3 {
+        font-size: 25px;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+    .coach-info p {
+        padding: 10px;
+        font-size: 18px;
+        text-align: justify;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+/* Entrenamientos */
+.workouts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px;
+    padding: 30px;
+}
+
+.workout-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    margin: 20px 0;
+}
+
+    .workout-item img {
+        width: 45%;
+        height: auto;
+    }
+
+.workout-info {
+    width: 50%;
+    text-align: left;
+}
+
+    .workout-info h3 {
+        font-size: 25px;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+    .workout-info p {
+        font-size: 18px;
+        text-shadow: 1px 1px 2px #000000;
+    }
+
+/* Contacto */
+.contact {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px 20%;
+    margin-bottom: 100px;
+}
+
+.contact-left {
+    text-align: left;
+}
+
+.contact-right {
+    text-align: right;
+}
+
+.contact-info {
+    margin-top: 10px;
+}
+
+.register-button-2 {
+    background-color: #199DFC;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .register-button-2:hover {
+        color: #444;
+        text-decoration: none;
+    }
+
+
 
 @media (max-width: 768px) {
     .title {
@@ -88,5 +247,34 @@
         width: 150px;
         height: 45px;
         font-size: 1rem;
+    }
+
+    .benefits {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .benefit-item {
+        max-width: 90%;
+        margin-bottom: 30px;
+    }
+
+    .coach-item {
+        width: 80%;
+        margin-bottom: 30px;
+    }
+
+    .workout-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+        .workout-item img {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+    .workout-info {
+        width: 100%;
     }
 }

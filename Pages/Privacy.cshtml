@@ -1,8 +1,36 @@
 ﻿@page
 @model PrivacyModel
-@{
-    ViewData["Title"] = "Privacy Policy";
-}
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@{
+    ViewData["Title"] = "Política de Privacidad";
+    Layout = "_Layout";
+}
+
+<style>
+    .content-container {
+        margin: 20px 40px 20px 40px; /* Margen arriba, derecha, abajo, izquierda */
+    }
+</style>
+
+<div class="content-container">
+    <h1>@ViewData["Title"]</h1>
+    <p>En Ragnarok, estamos comprometidos con proteger tu privacidad. Esta Política de Privacidad explica cómo recopilamos, utilizamos y compartimos tu información personal.</p>
+
+    <h2>Recopilación de Información</h2>
+    <p>Recopilamos información que tú nos proporcionas directamente, como cuando te registras en nuestro sitio, completas un formulario o te comunicas con nosotros. También recopilamos información automáticamente a través de tecnologías de seguimiento como cookies.</p>
+
+    <h2>Uso de la Información</h2>
+    <p>Utilizamos tu información para proporcionarte nuestros servicios, personalizar tu experiencia, mejorar nuestro sitio, y para comunicarnos contigo. También podemos utilizar tu información para fines de marketing, si has dado tu consentimiento para ello.</p>
+
+    <h2>Compartir Información</h2>
+    <p>No compartimos tu información personal con terceros, excepto cuando es necesario para cumplir con nuestras obligaciones legales, proteger nuestros derechos, o en el caso de una venta o fusión de nuestra empresa.</p>
+
+    <h2>Tus Derechos</h2>
+    <p>Tienes derecho a acceder, corregir o eliminar tu información personal que tenemos. También tienes derecho a oponerte al procesamiento de tu información y a solicitar la portabilidad de tus datos.</p>
+
+    <h2>Seguridad</h2>
+    <p>Tomamos medidas razonables para proteger tu información personal contra pérdida, robo, uso indebido y acceso no autorizado, divulgación, alteración y destrucción.</p>
+
+    <h2>Contacto</h2>
+    <p>Si tienes preguntas o inquietudes sobre nuestra Política de Privacidad, contáctanos en rgnrk.privacy@rgnrk.com.</p>
+</div>

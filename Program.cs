@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PE_ServicesClassRCL.Models.Permission;
 using RGNRK.Areas.Reservas.Pages.Reservations;
@@ -51,6 +52,11 @@ builder.Services.AddDbContext<RGNRKContext>(options =>
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<RGNRKContext>();
+
+// Configuración de EmailSettings
+var emailSettings = builder.Configuration.GetSection("EmailSettings").Get<EmailSettings>();
+builder.Services.AddSingleton(emailSettings);
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();
