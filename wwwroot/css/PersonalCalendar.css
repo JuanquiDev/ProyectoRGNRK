@@ -1,9 +1,8 @@
 ﻿body {
     font-family: 'Inter', sans-serif;
-    background-color: #1e1e1e;
-    color: white;
-    margin: 0;
-    padding: 0;
+    background-image: url('/img/crossfit6.png');
+    background-size: cover;
+    overflow-x: hidden;
 }
 
 #content {

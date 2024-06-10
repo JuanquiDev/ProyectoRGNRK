@@ -1,4 +1,11 @@
-﻿.category-header {
+﻿body {
+    font-family: 'Inter', sans-serif;
+    background-image: url('/img/crossfit9.png');
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+.category-header {
     cursor: pointer;
     color: white;
     font-weight: bold;

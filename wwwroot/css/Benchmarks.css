@@ -1,14 +1,15 @@
-﻿
-body {
+﻿body {
     font-family: 'Inter', sans-serif;
-    background-color: #1e1e1e;
+    background-image: url('/img/crossfit7.png');
+    background-size: cover;
     color: white;
+    overflow-x: hidden;
 }
 
 h2 {
     text-align: center;
-    margin-top: 40px; /* Aumentar el margen superior para bajar el título */
-    margin-bottom: 20px; /* Agregar margen inferior para separar del contenido */
+    margin-top: 40px;
+    margin-bottom: 20px;
     font-size: 50px;
     text-shadow: 1px 1px 2px #000000;
 }
@@ -16,8 +17,9 @@ h2 {
 .benchmark-container {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Cambiar a flex-start para alinear los elementos al principio */
-    height: calc(100vh - 60px); /* Ajustar la altura para evitar el scroll y tener espacio para el título */
+    align-items: flex-start;
+    min-height: calc(100vh - 60px);
+    padding-top: 60px;
 }
 
 .benchmark-list {
@@ -25,11 +27,11 @@ h2 {
     text-align: left;
     width: 80%;
     max-width: 800px;
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.8);
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin-top: 20px; /* Ajustar el margen superior para mover la tabla hacia arriba */
+    margin-top: 20px;
 }
 
 .styled-table {
@@ -94,5 +96,3 @@ h2 {
     .btn-save:hover {
         background-color: #17a2b8;
     }
-
-
