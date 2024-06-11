@@ -20,10 +20,6 @@ namespace RGNRK.Data
         public int ExerciseId { get; set; }
         public DateTime? StartDate { get; set; }
 
-        // Elimina PersonalCalendarId si no es necesario
-        // public int? PersonalCalendarId { get; set; }
-
-        // Relación con PersonalCalendarWorkout
         public virtual List<PersonalCalendarWorkout>? PersonalCalendarWorkouts { get; set; }
     }
 

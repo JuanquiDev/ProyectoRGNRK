@@ -73,8 +73,8 @@ namespace RGNRK.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Restablece tu contraseña",
+                    $"Por favor, restablece tu contraseña haciendo <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>click aquí</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

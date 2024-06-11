@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Apis.Gmail.v1" Version="1.68.0.3427" />
+    <PackageReference Include="MailKit" Version="4.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="8.0.6" />
@@ -56,6 +58,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Areas\Ejercicios\Pages\Exercises\Edit.cshtml" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\PersonalCalendar.css" />
   </ItemGroup>
 
 </Project>

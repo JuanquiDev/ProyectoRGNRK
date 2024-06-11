@@ -1,0 +1,93 @@
+﻿body {
+    font-family: 'Inter', sans-serif;
+    background-image: url('/img/crossfit9.png');
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+.category-header {
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    margin: 0 10px;
+}
+
+.exercise-list {
+    display: none;
+    margin-left: 20px;
+}
+
+.white-text {
+    color: white;
+}
+
+.video-container {
+    display: block;
+    margin-top: 10px;
+    margin: 10px auto;
+}
+
+.video-title {
+    font-size: 24px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.table {
+    margin: 20px;
+}
+
+    .table th, .table td {
+        padding: 10px;
+    }
+
+.category-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 50px;
+    text-shadow: 1px 1px 2px #000000;
+    width: 60%;
+    margin: 100px auto;
+    transition: margin-top 0.5s;
+}
+
+.categories {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.subtitle {
+    font-size: 35px;
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
+    display: block;
+    margin-top: 90px;
+}
+
+.exercise-list {
+    display: none;
+    width: 40%;
+    margin: 0px auto 50px;
+    background-color: #199DFC;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.exercise {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.top-position {
+    margin-top: 50px;
+}
+
+.exercise-top-position {
+    margin-top: 0px;
+}
+
+

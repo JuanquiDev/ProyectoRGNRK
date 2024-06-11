@@ -6,72 +6,66 @@
     Layout = "_Layout";
 }
 
+<link href="~/css/Benchmarks.css" rel="stylesheet">
+
+
 <h2>Benchmarks</h2>
 
-<div class="benchmark-list">
-    <form method="post">
-        @Html.AntiForgeryToken()
-        <table>
-            <thead>
-                <tr>
-                    <th>Exercise</th>
-                    <th>Record (kg)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var exercise in Model.Exercises)
-                {
+
+
+<div class="benchmark-container">
+    <div class="benchmark-list">
+        <form method="post">
+            @Html.AntiForgeryToken()
+            <table class="styled-table">
+                <thead>
                     <tr>
-                        <td>
-                            <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].ExerciseId" value="@exercise.Id" />
-                            <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
-                            <input type="text" readonly value="@exercise.Name" />
-                        </td>
-                        <td>
-                            @if (exercise.Benchmarks.Any())
-                            {
-                                var benchmark = exercise.Benchmarks.FirstOrDefault();
-                                <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="@benchmark.PersonalRecords" />
-                            }
-                            else
-                            {
-                                <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="" />
-                            }
-                        </td>
-                        <td>
-                            <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                        </td>
+                        <th>Ejercicio</th>
+                        <th>Record (kg)</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        <button type="submit">Save</button>
-    </form>
-</div>
+                </thead>
+                <tbody>
+                    @foreach (var exercise in Model.Exercises)
+                    {
+                        <tr>
+                            <td>
+                                <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].ExerciseId" value="@exercise.Id" />
+                                <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].UserId" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" />
+                                <input type="text" readonly value="@exercise.Name" class="exercise-name" />
+                            </td>
+                            <td>
+                                @if (exercise.Benchmarks.Any())
+                                {
+                                    var benchmark = exercise.Benchmarks.FirstOrDefault();
+                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="@benchmark.PersonalRecords" class="record-input" required min="1" />
+                                }
+                                else
+                                {
+                                    <input type="number" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].PersonalRecords" value="" class="record-input" required min="1" />
+                                }
+                            </td>
+                            <td>
+                                <input type="hidden" name="InputBenchmarks[@Model.Exercises.IndexOf(exercise)].Date" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <button type="submit" class="btn-save">Guardar</button>
 
-<style>
-    .benchmark-list {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.2rem;
-        color: white;
-        text-align: left;
-        margin: 20px;
-    }
+            <script>
+                document.querySelector('form').addEventListener('submit', function (event) {
+                    var inputs = document.querySelectorAll('.record-input');
+                    for (var i = 0; i < inputs.length; i++) {
+                        if (inputs[i].value === '' || inputs[i].value <= 0) {
+                            alert('Por favor, introduce un valor mayor a 0 para todos los registros personales.');
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                });
+            </script>
+        </form>
+    </div>
+    </div>
 
-    .btn-bnch {
-        background-color: #199DFC;
-        color: white;
-        border: none;
-        border-radius: 7px;
-        padding: 10px 20px;
-        font-size: 1.2rem;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 20px;
-    }
-
-        .btn-bnch:hover {
-            color: #D3D3D3;
-            text-decoration: none;
-        }
-</style>

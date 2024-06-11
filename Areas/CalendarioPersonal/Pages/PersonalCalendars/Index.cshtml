@@ -5,34 +5,9 @@
     ViewData["Title"] = "Calendario Personal";
     Layout = "_Layout";
 }
-<style>
-    #content {
-        display: flex;
-        margin: 20px; 
-        align-items: flex-start;
-        
-    }
-
-    #eventsTable {
-        text-align: center;
-        flex: 0.25;
-        justify-items: center;
-
-    }
-
-        #eventsTable td {
-            padding: 20px;
-            font-size: 15px;
-        }
-
-    #calendar {
-        width: 800px; 
-        margin: auto;
-    }
-</style>
+<link href="~/css/PersonalCalendar.css" rel="stylesheet">
 
 <h2>@ViewData["Title"]</h2>
-
 
 <div id="content">
     <table id="eventsTable">
@@ -41,7 +16,9 @@
                 <th>Indice</th>
                 <th>Tipo</th>
                 <th>Fecha</th>
+                <th>Hora</th>
                 <th>Descripción</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +28,14 @@
                     <td>@Html.Encode(workout.Id)</td>
                     <td>Workout</td>
                     <td>@Html.Encode(workout.StartDate?.ToString("yyyy-MM-dd"))</td>
+                    <td>Todo el día</td>
                     <td>@Html.Encode(workout.Title)</td>
+                    <td>
+                        <form method="post" asp-page-handler="DeleteWorkout">
+                            <input type="hidden" name="workoutId" value="@workout.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             }
             @foreach (var reserva in Model.Reservas)
@@ -59,14 +43,23 @@
                 <tr>
                     <td>@Html.Encode(reserva.Id)</td>
                     <td>Reserva</td>
-                    <td>@Html.Encode(reserva.Fecha)</td>
-                    <td>Entrenador: @Html.Encode(reserva.Entrenador)</td>
+                    <td>@Html.Encode(reserva.Fecha.ToString("yyyy-MM-dd"))</td>
+                    <td>@Html.Encode(reserva.StartDate.ToString("HH:mm") + " - " + reserva.EndDate.ToString("HH:mm"))</td>
+                    <td>Entrenador: @Html.Encode(reserva.Entrenador.ToString())</td>
+                    <td>
+                        <form method="post" asp-page-handler="DeleteReserva">
+                            <input type="hidden" name="reservaId" value="@reserva.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <div id="calendar"></div>
+    <div id="calendarContainer">
+        <div id="calendar"></div>
+    </div>
 </div>
 
 @section Scripts {
@@ -74,22 +67,28 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.1.0/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.1.0/locales/es.js"></script>
     <script>
-        let eventsArr = loadData();
-        let calendar = initCalendar();
+        document.addEventListener('DOMContentLoaded', function () {
+            let eventsArr = loadData();
+            let calendar = initCalendar(eventsArr);
+        });
 
         function loadData() {
             let eventsArr = [];
-
             let eventsTable = document.getElementById("eventsTable");
             let tbodyElem = eventsTable.getElementsByTagName("tbody")[0];
             let trElem = tbodyElem.getElementsByTagName("tr");
+
             for (let tr of trElem) {
                 let tdElems = tr.getElementsByTagName("td");
+                let start = tdElems[2].innerText + 'T' + (tdElems[1].innerText === 'Workout' ? '00:00' : tdElems[3].innerText.split(' - ')[0]);
+                let end = tdElems[1].innerText === 'Workout' ? null : tdElems[2].innerText + 'T' + tdElems[3].innerText.split(' - ')[1];
+
                 let eventObj = {
                     id: tdElems[0].innerText,
-                    title: tdElems[1].innerText,
-                    start: tdElems[2].innerText,
-                    description: tdElems[3].innerText
+                    title: tdElems[1].innerText + ': ' + tdElems[4].innerText,  // Incluye el tipo y descripción
+                    start: start,
+                    end: end,
+                    description: tdElems[4].innerText
                 }
 
                 eventsArr.push(eventObj);
@@ -98,11 +97,11 @@
             return eventsArr;
         }
 
-        function initCalendar() {
+        function initCalendar(eventsArr) {
             var calendarEl = document.getElementById('calendar');
 
             let calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'es', // Añade esta línea
+                locale: 'es',
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',

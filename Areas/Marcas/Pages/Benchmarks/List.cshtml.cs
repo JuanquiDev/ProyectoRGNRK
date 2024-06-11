@@ -45,6 +45,16 @@ namespace RGNRK.Areas.Marcas.Pages.Benchmarks
                 return Page();
             }
 
+            // Validar que todos los InputBenchmarks tengan valores válidos
+            foreach (var inputBenchmark in InputBenchmarks)
+            {
+                if (inputBenchmark.PersonalRecords <= 0)
+                {
+                    ModelState.AddModelError("", "Todos los registros personales deben ser mayores a 0.");
+                    return Page();
+                }
+            }
+
             // Buscar al usuario actual
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             if (user == null)
@@ -88,6 +98,7 @@ namespace RGNRK.Areas.Marcas.Pages.Benchmarks
             // Después de guardar los cambios, redirigir a la página actual
             return RedirectToPage();
         }
+
 
         private async Task LoadExercisesAsync()
         {

@@ -1,10 +1,11 @@
 ﻿@page
+@using static RGNRK.Data.User
 @model RGNRK.Pages.IndexLoggedInModel
 @{
     ViewData["Title"] = "Home - Logged In";
 }
 
-<h1 class="title">Bienvenido, @Model.UserProfile.FirstName @Model.UserProfile.LastName</h1>
+<h1 class="title">Bienvenid@@, @Model.UserProfile.FirstName @Model.UserProfile.LastName</h1>
 
 <div class="user-profile">
     <form method="post">
@@ -22,34 +23,40 @@
             <strong>Correo:</strong> @Model.UserProfile.Email
         </div>
         <div>
-            <label asp-for="UserProfile.Height"><strong>Altura:</strong></label>
-            <input type="number" asp-for="UserProfile.Height" class="form-control" /> cm
+            <label asp-for="UserProfile.Height"><strong>Altura (cm):</strong></label>
+            <input type="number" asp-for="UserProfile.Height" class="form-control" /> 
             <span asp-validation-for="UserProfile.Height" class="text-danger"></span>
         </div>
         <div>
-            <label asp-for="UserProfile.Weight"><strong>Peso:</strong></label>
-            <input type="number" asp-for="UserProfile.Weight" class="form-control" /> kg
+            <label asp-for="UserProfile.Weight"><strong>Peso (kg):</strong></label>
+            <input type="number" asp-for="UserProfile.Weight" class="form-control" />
             <span asp-validation-for="UserProfile.Weight" class="text-danger"></span>
         </div>
         <div>
             <label asp-for="UserProfile.UserCategory"><strong>Categoría:</strong></label>
-            <input type="text" asp-for="UserProfile.UserCategory" class="form-control" />
+            <select asp-for="UserProfile.UserCategory" asp-items="Html.GetEnumSelectList<Category>()" class="form-control"></select>
             <span asp-validation-for="UserProfile.UserCategory" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn-bnch btn-primary">Actualizar</button>
+        <div class="button-container">
+            <button type="submit" class="btn-bnch btn-primary">Actualizar</button>
+        </div>
     </form>
 
-    <a asp-area="Marcas" asp-page="/Benchmarks/List" class="btn-bnch btn-primary">Mis Marcas</a>
-    @* <h2>Mis Reservas</h2>
-    <ul>
-    @foreach (var reserva in @Model.UserProfile.Reservas)
-    {
-    <li>@reserva.Fecha - @reserva.Entrenador</li>
-    }
-    </ul> *@
+     
+
+    
 </div>
 
 <style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-image: url('/img/crossfit-1.jpg');
+        background-size: cover;
+        color: white;
+        overflow-x: hidden;
+    }
+
+
     .title {
         font-family: 'Inter', sans-serif;
         font-weight: 700;
@@ -68,8 +75,8 @@
     }
 
     .btn-bnch {
-        background-color: #199DFC;
-        color: white;
+        background-color: #ffffff;
+        color: #199DFC;
         border: none;
         border-radius: 7px;
         padding: 10px 20px;
@@ -83,6 +90,36 @@
             color: #D3D3D3;
             text-decoration: none;
         }
+
+    .button-container {
+        text-align: right; /* Alinea el contenido a la derecha */
+    }
+
+    .user-profile form {
+        background-color: #199DFC;
+        max-width: 600px; /* Ajusta esto a la anchura que prefieras */
+        margin: 0 auto; /* Centra el formulario horizontalmente */
+        padding: 20px;
+        border-radius: 7px;
+        margin-bottom: 80px;
+    }
+
+        .user-profile form .form-control {
+            background-color: #ffffff; /* Cambia esto al color que prefieras */
+            color: #000000; /* Cambia esto al color que prefieras */
+            border: none;
+        }
+
+            .user-profile form .form-control:focus {
+                background-color: #ffffff; /* Cambia esto al color que prefieras */
+                color: #000000; /* Cambia esto al color que prefieras */
+                border: none;
+                outline: none;
+                box-shadow: none;
+            }
+
+        .user-profile form div {
+            margin-bottom: 20px; /* Ajusta esto al espacio que prefieras */
 </style>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -2,11 +2,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using RGNRK.Configuracion;
 using RGNRK.Data;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 public class EntrenamientosModel : PageModel
 {
@@ -28,9 +25,13 @@ public class EntrenamientosModel : PageModel
 
     public void OnGet()
     {
+        var categoryIds = new List<int> { 2, 3, 4 };
+
         Exercises = _context.Exercises
             .Include(e => e.ExerciseVideo)
             .Include(e => e.Workout)
+            .Include(e => e.Category)
+            .Where(e => categoryIds.Contains(e.CategoryId))
             .ToList();
 
         if (SelectedExerciseId.HasValue && SelectedExerciseId.Value > 0)
@@ -38,6 +39,7 @@ public class EntrenamientosModel : PageModel
             SelectedExercise = _context.Exercises
                 .Include(e => e.ExerciseVideo)
                 .Include(e => e.Workout)
+                .Include(e => e.Category)
                 .FirstOrDefault(e => e.Id == SelectedExerciseId.Value);
         }
     }
@@ -68,6 +70,9 @@ public class EntrenamientosModel : PageModel
 
             if (selectedExercise != null && selectedExercise.Workout != null && selectedExercise.Workout.Any())
             {
+                var workout = selectedExercise.Workout.First();
+                workout.StartDate = DateTime.Now; 
+
                 var personalCalendarWorkout = new PersonalCalendarWorkout
                 {
                     PersonalCalendarId = personalCalendar.Id,
@@ -86,7 +91,6 @@ public class EntrenamientosModel : PageModel
             return RedirectToPage();
         }
 
-        // Lógica existente para otras acciones
         if (User.IsInRole(Permissions.Admin_Role) ||
             User.IsInRole(Permissions.Manager_Role) ||
             User.IsInRole(Permissions.Coach_Role))

@@ -2,99 +2,63 @@
 @model RGNRK.Areas.Ejercicios.Pages.Exercises.ListModel
 @{
     ViewData["Title"] = "Ejercicios";
-    Layout = "_Layout"; // Asegúrate de que esto apunte a tu layout principal
+    Layout = "_Layout";
 }
 
-<style>
-    .category-header {
-        cursor: pointer;
-        color: white;
-        font-weight: bold;
-    }
+<link href="~/css/Ejercicios.css" rel="stylesheet">
 
-    .exercise-list {
-        display: none;
-        margin-left: 20px;
-    }
-
-    .white-text {
-        color: white;
-    }
-
-    .video-container {
-        display: block; /* Cambiado a block para que el video se muestre */
-        margin-top: 10px;
-    }
-
-    .video-title {
-        margin-top: 10px;
-        font-weight: bold;
-    }
-
-    .table {
-        margin: 20px; /* Añadir margen a la tabla */
-    }
-
-        .table th, .table td {
-            padding: 10px; /* Añadir padding a las celdas de la tabla */
+<div class="category-container" id="category-container">
+    <div class="categories">
+        @foreach (var category in Model.Categories)
+        {
+            <div class="category-header" onclick="toggleExercises('category-@category.Id')">
+                @category.Name
+            </div>
         }
-</style>
-
-<h1 class="white-text">Ejercicios por Categoría</h1>
+    </div>
+    <div class="subtitle" id="subtitle">Pulsa en cualquier categoría para desplegar sus ejercicios</div>
+</div>
 
 @foreach (var category in Model.Categories)
 {
-    <div>
-        <div class="category-header" onclick="toggleExercises('category-@category.Id')">
-            @category.Name
-        </div>
-        <div id="category-@category.Id" class="exercise-list">
-            <table class="table white-text">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Video</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var exercise in category.Exercises)
-                    {
-                        <tr>
-                            <td>@exercise.Name</td>
-                            <td>@exercise.Description</td>
-                            <td>
-                                <div id="video-@exercise.Id" class="video-container">
-                                    <iframe width="560" height="315" src="@exercise.ExerciseVideo.Url" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-                                    <div class="video-title">
-                                        <a href="@exercise.ExerciseVideo.Url" target="_blank">@exercise.ExerciseVideo.Title</a>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+    <div id="category-@category.Id" class="exercise-list">
+        @foreach (var exercise in category.Exercises)
+        {
+            <div class="exercise">
+                <div class="video-title">
+                    @exercise.Name
+                </div>
+                <div id="video-@exercise.Id" class="video-container">
+                    <iframe width="560" height="315" src="@exercise.ExerciseVideo.Url" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+                <div class="video-description">
+                    @exercise.Description
+                </div>
+            </div>
+        }
     </div>
 }
 
 <script>
-    function toggleExercises(id) {
-        var element = document.getElementById(id);
-        if (element.style.display === "none") {
-            element.style.display = "block";
-        } else {
-            element.style.display = "none";
-        }
-    }
+    function toggleExercises(categoryId) {
+        var exerciseList = document.getElementById(categoryId);
+        var subtitle = document.getElementById('subtitle');
+        var categoryContainer = document.getElementById('category-container');
 
-    function toggleVideo(id) {
-        var element = document.getElementById(id);
-        if (element.style.display === "none" || element.style.display === "") {
-            element.style.display = "block";
+        if (exerciseList.style.display === 'block') {
+            exerciseList.style.display = 'none';
+            subtitle.style.display = 'block';
+            categoryContainer.classList.remove('top-position');
         } else {
-            element.style.display = "none";
+            // Ocultar todos los exercise-list
+            var allExerciseLists = document.getElementsByClassName('exercise-list');
+            for (var i = 0; i < allExerciseLists.length; i++) {
+                allExerciseLists[i].style.display = 'none';
+            }
+            exerciseList.style.display = 'block';
+            subtitle.style.display = 'none';
+            categoryContainer.classList.add('top-position');
         }
     }
 </script>
+
