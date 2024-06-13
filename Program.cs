@@ -1,13 +1,18 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using PE_ServicesClassRCL.Models.Permission;
-using RGNRK.Areas.Reservas.Pages.Reservations;
-using RGNRK.Configuracion;
 using RGNRK.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.ListenAnyIP(8080); // HTTP port
+//    serverOptions.ListenAnyIP(8081, listenOptions =>
+//    {
+//        listenOptions.UseHttps(); // HTTPS port
+//    });
+//});
 
 // Add services to the container.
 builder.Services.AddRazorPages()
@@ -38,10 +43,19 @@ builder.Services.AddAuthentication()
         options.CallbackPath = new PathString("/signin-twitter");
     });
 
-var serverVersion = ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("RGNRKContextConnection"));
+builder.Services.AddControllers();
+
+// Get the connection string from environment variable or configuration file
+string connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") ??
+                          builder.Configuration.GetConnectionString("RGNRKContextConnection")!;
+
+var serverVersion = ServerVersion.AutoDetect(connectionString);
+
 builder.Services.AddDbContext<RGNRKContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("RGNRKContextConnection"), serverVersion, mySqlOptionsAction: sqlOptions =>
+        connectionString,
+        serverVersion,
+        mySqlOptionsAction: sqlOptions =>
         {
             sqlOptions.EnableRetryOnFailure(
                 maxRetryCount: 10,
@@ -55,9 +69,8 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 
 // Configuración de EmailSettings
 var emailSettings = builder.Configuration.GetSection("EmailSettings").Get<EmailSettings>();
-builder.Services.AddSingleton(emailSettings);
+builder.Services.AddSingleton(emailSettings!);
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-
 
 var app = builder.Build();
 
@@ -83,6 +96,20 @@ app.MapControllerRoute(
 
 using (var scope = app.Services.CreateScope())
 {
+    using var dbContext = scope.ServiceProvider.GetRequiredService<RGNRKContext>();
+
+    try
+    {
+        // Aplica migraciones solo si no han sido aplicadas ya
+        dbContext.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        // Manejo de excepción: podrías registrar el error o manejarlo de otra manera
+        // Nota: Reemplaza esto con la lógica adecuada de manejo de errores en tu aplicación
+        Console.WriteLine($"Error al aplicar migraciones: {ex.Message}");
+    }
+
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     var roles = new List<string> { "Admin", "Manager", "Coach", "User" };
@@ -95,6 +122,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
 
 using (var scope = app.Services.CreateScope())
 {

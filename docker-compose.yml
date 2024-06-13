@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  rgnrkv3:
+    image: juanquidev/rgnrkv3:latest
+    container_name: rgnrkv3
+    build:
+      context: .
+      platforms:
+        - linux/amd64
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports: 
+      - 32770:8080
+    environment:
+      DB_CONNECTION_STRING: "server=mysql,3306;uid=root;database=rgnrk-v2;port=3306;pwd=root"
+    restart: unless-stopped
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.37
+    restart: unless-stopped
+    environment: 
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=rgnrk-v2
+    volumes: 
+      - C:/Users/Delorean_Laptop/Desktop/Proyecto/MySQL:/var/lib/mysql
+    ports: 
+      - 54235:3306
