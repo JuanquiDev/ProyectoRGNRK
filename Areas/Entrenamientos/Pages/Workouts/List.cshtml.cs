@@ -12,8 +12,8 @@ public class EntrenamientosModel : PageModel
     public EntrenamientosModel(RGNRKContext context)
     {
         _context = context;
-        Exercises = new List<Exercise>(); // Inicializar a lista vacía
-        SelectedExercise = null; // Inicializar a null
+        Exercises = new List<Exercise>(); 
+        SelectedExercise = null; 
     }
 
     [BindProperty(SupportsGet = true)]
